@@ -1,15 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 //https://jsfiddle.net/vbwe1s44/ example 
 
+// replace later with api lookup
 const data: Array<PlantProps> = [
   {name: "Daisy", id: 1},
   {name: "Rose", id: 2}
 ]
 
-type PlantProps = { //idk what their actual props are
+type PlantProps = {
   name: string,
   id: number
 };
@@ -54,9 +54,11 @@ class PlantBox extends React.Component<{}, boxState> {
 
   handleEvent = (clickedPlant: PlantProps) => {
       const { searchPlants, selectedPlants } = this.state;
+      // checks if clicked plant is in search plants
       const isInSearchResults = searchPlants.some(result => result.id === clickedPlant.id);
 
       this.setState({
+        // check which list clicked plant startss in and remove if it's in that one, add if it's not
         searchPlants: isInSearchResults ? searchPlants.filter(i => i.id  !== clickedPlant.id) : [...searchPlants, clickedPlant],
         selectedPlants: isInSearchResults ? [...selectedPlants, clickedPlant] : selectedPlants.filter(i => i.id !== clickedPlant.id)
       });
@@ -66,13 +68,6 @@ class PlantBox extends React.Component<{}, boxState> {
   componentDidMount() {
     this.showResults(data);
   }
-
-  // handleChange() {
-  //   this.setState({
-  //     allPlants: this.props.allPlants,
-  //     selectedPlants: this.props.selectedPlants
-  //   });
-  // }
 
   render() {
     return (
@@ -86,8 +81,6 @@ class PlantBox extends React.Component<{}, boxState> {
       </div>
     )
   }
-
-  // figure out how to lift state up idk read tutorial
 }
 
 const PlantList = (props: {plants: Array<PlantProps>, handleClick(plant: PlantProps): any}) => {
@@ -99,23 +92,6 @@ const PlantList = (props: {plants: Array<PlantProps>, handleClick(plant: PlantPr
     </ul>)
 }
 
-// class PlantLookup extends React.Component<{}, {plants: Array<PlantProps>}>  {
-//   constructor(props: Array<PlantProps>) {
-//     super(props);
-//     this.state = this.stateplants}
-//   }
-
-//   render() {
-//     return (
-//       <ul>
-//         {this.state.plants.map((item, key) => {
-//           return <Plant name={item.name} id={item.id} />
-//         })}
-//       </ul>
-//     );
-//   }
-// }
-
 interface PlantDisProps {
   plant: PlantProps,
   handleClick(plant: PlantProps): any, 
@@ -125,21 +101,6 @@ class Plant extends React.Component<PlantDisProps, {}> {
       const { handleClick, plant } = this.props;
       return <li onClick={() => handleClick(plant)}> {plant.name} </li>;
   }
-}
-// const Plant = (props: {plant: PlantProps, onClick(plant: PlantProps): any}) => {
-//   return (
-//     <li onClick={() => props.onClick(props.plant)}> {props.plant.name}: {props.plant.id}</li>
-//   )
-// }
-
-function updateSelected(plant: PlantProps) {
-  selectedPlants.push({name: plant.name, id: plant.id});
-  searchPlants.splice(searchPlants.indexOf({name: plant.name, id: plant.id}), 1);
-}
-
-function unSelect(plant: PlantProps) {
-  searchPlants.push({name: plant.name, id: plant.id});
-  selectedPlants.splice(searchPlants.indexOf({name: plant.name, id: plant.id}), 1);
 }
 
 export default App;
