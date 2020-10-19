@@ -12,4 +12,10 @@ code {
     monospace;
 }
 
+#selected-plants {
+  color: red;
+}
 
+#search-plants {
+  color: blue;
+}

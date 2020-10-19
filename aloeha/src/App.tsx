@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+//https://jsfiddle.net/vbwe1s44/ example 
+
 const data: Array<PlantProps> = [
   {name: "Daisy", id: 1},
   {name: "Rose", id: 2}
@@ -18,13 +20,13 @@ let selectedPlants: Array<PlantProps> = [];
 export const App = () => {
   return (
     <div className="App">
-      <PlantBox searchData={searchPlants} selected={selectedPlants} />
+      <PlantBox />
     </div>
   );
 }
 
 type boxState = {
-  allPlants: Array<PlantProps>,
+  searchPlants: Array<PlantProps>,
   selectedPlants: Array<PlantProps>
 }
 
@@ -33,28 +35,54 @@ type listProps = {
   selected: Array<PlantProps>
 }
 
-class PlantBox extends React.Component<listProps, boxState> {
-  constructor(props: listProps) {
+class PlantBox extends React.Component<{}, boxState> {
+  constructor(props: any) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleEvent = this.handleEvent.bind(this);
     this.state = {
-      allPlants: props.searchData,
-      selectedPlants: props.selected
+      searchPlants: [],
+      selectedPlants: []
     };
   }
 
-  handleChange() {
+  showResults = (data: PlantProps[]) => {
     this.setState({
-      allPlants: this.props.searchData,
-      selectedPlants: this.props.selected
-    });
+      searchPlants: data,
+      selectedPlants: []
+    })
   }
+
+  handleEvent = (clickedPlant: PlantProps) => {
+      const { searchPlants, selectedPlants } = this.state;
+      const isInSearchResults = searchPlants.some(result => result.id === clickedPlant.id);
+
+      this.setState({
+        searchPlants: isInSearchResults ? searchPlants.filter(i => i.id  !== clickedPlant.id) : [...searchPlants, clickedPlant],
+        selectedPlants: isInSearchResults ? [...selectedPlants, clickedPlant] : selectedPlants.filter(i => i.id !== clickedPlant.id)
+      });
+  }
+
+
+  componentDidMount() {
+    this.showResults(data);
+  }
+
+  // handleChange() {
+  //   this.setState({
+  //     allPlants: this.props.allPlants,
+  //     selectedPlants: this.props.selectedPlants
+  //   });
+  // }
 
   render() {
     return (
       <div className="plantbox">
-        <PlantList onClick={updateSelected} plants={this.state.allPlants} />
-        <PlantList onClick={unSelect} plants={this.state.selectedPlants} />
+        <div id="search-plants">
+          <PlantList handleClick={this.handleEvent} plants={this.state.searchPlants} />
+        </div>
+        <div id="selected-plants">
+          <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
+        </div>
       </div>
     )
   }
@@ -62,11 +90,11 @@ class PlantBox extends React.Component<listProps, boxState> {
   // figure out how to lift state up idk read tutorial
 }
 
-const PlantList = (props: {plants: Array<PlantProps>, onClick(plant: PlantProps): any}) => {
+const PlantList = (props: {plants: Array<PlantProps>, handleClick(plant: PlantProps): any}) => {
     return (
       <ul>
       {props.plants.map((item) => 
-        <Plant plant={item} onClick={props.onClick} />
+        <Plant plant={item} handleClick={props.handleClick} />
       )}
     </ul>)
 }
@@ -88,11 +116,21 @@ const PlantList = (props: {plants: Array<PlantProps>, onClick(plant: PlantProps)
 //   }
 // }
 
-const Plant = (props: {plant: PlantProps, onClick(plant: PlantProps): any}) => {
-  return (
-    <li onClick={() => props.onClick(props.plant)}> {props.plant.name}: {props.plant.id}</li>
-  )
+interface PlantDisProps {
+  plant: PlantProps,
+  handleClick(plant: PlantProps): any, 
 }
+class Plant extends React.Component<PlantDisProps, {}> {
+  render(){
+      const { handleClick, plant } = this.props;
+      return <li onClick={() => handleClick(plant)}> {plant.name} </li>;
+  }
+}
+// const Plant = (props: {plant: PlantProps, onClick(plant: PlantProps): any}) => {
+//   return (
+//     <li onClick={() => props.onClick(props.plant)}> {props.plant.name}: {props.plant.id}</li>
+//   )
+// }
 
 function updateSelected(plant: PlantProps) {
   selectedPlants.push({name: plant.name, id: plant.id});
