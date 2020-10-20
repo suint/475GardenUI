@@ -10,6 +10,18 @@ function Navbar(props: any) {
         <Link className="nav-link" to={"/select"}>
             Select
         </Link>
+        <Link className="nav-link" to={"/questionnaire"}>
+            Questionnaire
+        </Link>
+        <Link className="nav-link" to={"/design"}>
+            Design
+        </Link>
+        <Link className="nav-link" to={"/preview"}>
+            Preview
+        </Link>
+        <Link className="nav-link" to={"/build"}>
+            Build
+        </Link>
     </div>
   );
 }
