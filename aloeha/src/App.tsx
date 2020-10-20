@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Navbar, Select, Start, Design, Questionnaire, Preview } from "./components";
+import { Navbar, Select, Start, Design, Questionnaire, Preview, Build } from "./components";
 import './App.css';
 
 //https://jsfiddle.net/vbwe1s44/ example 
@@ -17,6 +17,7 @@ export const App = () => {
         <Route path="/design" exact component={() => <Design />} />
         <Route path="/questionnaire" exact component={() => <Questionnaire />} />
         <Route path="/preview" exact component={() => <Preview />} />
+        <Route path="/build" exact component={() => <Build />} />
       </Switch>
       <Navbar />
     </Router>
