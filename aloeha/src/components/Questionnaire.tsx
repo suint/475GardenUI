@@ -7,7 +7,13 @@ function Questionnaire(props: any) {
     return (
         <div id="design">
             <h1>Garden questionnaire form goes here</h1>
-            <img src={placeholder} style={{width: "600px"}} />
+            <img src={placeholder} style={{ width: "600px" }} />
+            <Link className="nav-link" to="/select">
+                Back
+            </Link>
+            <Link className="nav-link" to="/design">
+                Next
+            </Link>
         </div>
     )
 }

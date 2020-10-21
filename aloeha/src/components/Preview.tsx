@@ -6,7 +6,13 @@ function Preview(props: any) {
     return (
         <div id="design">
             <h1>Preview widget goes here</h1>
-            <img src={placeholder} style={{width: "600px"}} />
+            <img src={placeholder} style={{ width: "600px" }} />
+            <Link className="nav-link" to="/design">
+                Back
+            </Link>
+            <Link className="nav-link" to="/build">
+                Next
+            </Link>
         </div>
     )
 }

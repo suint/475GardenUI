@@ -24,6 +24,6 @@ function Navbar(props: any) {
         </Link>
     </div>
   );
-}
+} 
 
 export default withRouter(Navbar);

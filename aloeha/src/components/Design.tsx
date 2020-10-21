@@ -6,8 +6,15 @@ function Design(props: any) {
     return (
         <div id="design">
             <h1>Design widget goes here</h1>
-            <img src={placeholder} style={{width: "600px"}} />
+            <img src={placeholder} style={{ width: "600px" }} />
+            <Link className="nav-link" to="/questionnaire">
+                Back
+            </Link>
+            <Link className="nav-link" to="/preview">
+                Next
+            </Link>
         </div>
+        
     )
 }
 
