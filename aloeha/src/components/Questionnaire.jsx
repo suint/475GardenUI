@@ -149,6 +149,7 @@ class Questionnaire extends Component {
             for better suggestions on which plants would be best for your garden and preferences. 
             You can always come back to this page if you need to make any changes. 
             Click 'Next' to see your plant suggestions</p>
+
           {/* Garden Name */}
           <Input inputType={'text'}
             title={'Garden Name:'}
