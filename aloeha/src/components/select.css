@@ -1,0 +1,35 @@
+body {
+    
+}
+#plantbox {
+    margin: auto;
+    width: 80%;
+}
+.plants {
+    width: 50%;
+    float: left;
+    padding: 20px;
+}  
+#selected-plants {
+    text-align: left;
+    color: black;
+}
+#search-plants {
+    text-align: left;
+    background-color: #a1ca28;
+}
+#search {
+    margin: 1em 0;
+}
+input {
+    width: 80%;
+}
+
+ul {
+    list-style-type: none;
+    padding:0;
+}
+li:hover {
+    font-weight:bold;
+    cursor: pointer;
+}
