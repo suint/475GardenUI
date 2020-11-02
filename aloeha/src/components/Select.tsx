@@ -66,12 +66,10 @@ class PlantBox extends React.Component<{}, boxState> {
         let input = document.getElementById("search-input") as HTMLInputElement;
         if (input.value) {
             let searchText = input.value;
-            console.log(searchText)
-            this.setState({searchPlants: data.filter((plant) => plant.name.includes(searchText))});
+            this.setState({searchPlants: data.filter((plant) => plant.name.toLowerCase().includes(searchText.toLowerCase()))});
         } else {
             this.setState({searchPlants: data});
         }
-        console.log(this.state);
     }
 
 
@@ -93,7 +91,7 @@ render() {
             <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
             </div>
 
-            <img src={placeholder} style={{ width: "600px" }} />
+            {/* <img src={placeholder} style={{ width: "600px" }} /> */}
         </div>
         )
     }   
@@ -101,7 +99,7 @@ render() {
 
 const PlantList = (props: {plants: Array<PlantProps>, handleClick(plant: PlantProps): any}) => {
     return (
-    <ul>
+    <ul className="plant-list">
     {props.plants.map((item) => 
         <Plant plant={item} handleClick={props.handleClick} />
     )}
@@ -120,7 +118,7 @@ class Search extends React.Component<SearchProps, {}> {
     render() {
         return (
             <div id="search">
-                <input id="search-input" type="text"></input> <button onClick={this.props.onSearch}>Submit</button>
+                <label>Begin typing to search</label><input onChange={this.props.onSearch} id="search-input" type="text"></input>
             </div>
         )
     }

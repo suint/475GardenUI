@@ -4,25 +4,33 @@ body {
 #plantbox {
     margin: auto;
     width: 80%;
+    height:40em;
 }
 .plants {
     width: 50%;
     float: left;
     padding: 20px;
 }  
+.plant-list {
+    height: inherit;
+    scroll-behavior: auto;
+}
 #selected-plants {
     text-align: left;
     color: black;
+    background-color:#ffffff;
+    height:inherit;
 }
 #search-plants {
     text-align: left;
+    height: inherit;
     background-color: #a1ca28;
 }
 #search {
     margin: 1em 0;
 }
 input {
-    width: 80%;
+    width: 100%;
 }
 
 ul {
