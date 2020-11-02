@@ -144,7 +144,7 @@ class Questionnaire extends Component {
 
         <div className="col-md-3"></div>
 
-        <form className="container-fluid col-md-6" onSubmit={this.handleFormSubmit}>
+        <form className="container-fluid col-md-6" >
           <p> Welcome to the Aloe-ha questionnaire! Please fill out the questions below 
             for better suggestions on which plants would be best for your garden and preferences. 
             You can always come back to this page if you need to make any changes. 
