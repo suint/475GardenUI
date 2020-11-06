@@ -13,22 +13,6 @@ const data: Array<PlantProps> = [
     {name: "Tulip", id: 6},
     {name: "Hydrangea", id: 7},
 ]
-const plantsAndShrubsOptions = [
-    'one', 'two'
-  ];
-
-
-const smTreesOptions = [
-    'one', 'two'
-  ];
-
-const mdTreesOptions = [
-    'one', 'two'
-  ];
-
-const lgTreesOptions = [
-    'one', 'two'
-  ];
 
 type PlantProps = {
     name: string,
@@ -41,7 +25,6 @@ let selectedPlants: Array<PlantProps> = [];
 type boxState = {
     searchPlants: Array<PlantProps>,
     selectedPlants: Array<PlantProps>,
-    dataSrc: string // TEMPORARY FOR TESTING 
   }
 
 const Select = () => {
@@ -57,11 +40,9 @@ class PlantBox extends React.Component<{}, boxState> {
     constructor(props: any) {
         super(props);
         this.handleEvent = this.handleEvent.bind(this);
-        this.switchDataSource = this.switchDataSource.bind(this);
         this.state = {
         searchPlants: [],
         selectedPlants: [],
-        dataSrc: "local",
         };
     }
 
@@ -113,23 +94,11 @@ class PlantBox extends React.Component<{}, boxState> {
         // )
         this.showResults(data);
     }
-
-switchDataSource() {
-    if (this.state.dataSrc == "local") {
-        this.setState({dataSrc: "api"});
-    } else {
-        this.setState({dataSrc: "local"})
-    }
-}
     
-    
-
-
 render() {
     return (
         <div id="plantbox">
             <h1>Plant Select</h1>
-            <button onClick={this.switchDataSource}>Switch data</button>
                 <div id="search-plants" className="plants">
                     <p>Search for plants you would like to place in your garden.</p>
                     <p>Once you have found your plant, click on its name to add it to your list. To remove a plant from your list, simply click it again.</p>
