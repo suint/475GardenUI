@@ -24,7 +24,8 @@ let selectedPlants: Array<PlantProps> = [];
 
 type boxState = {
     searchPlants: Array<PlantProps>,
-    selectedPlants: Array<PlantProps>
+    selectedPlants: Array<PlantProps>,
+    dataSrc: string // TEMPORARY FOR TESTING 
   }
 
 const Select = () => {
@@ -38,9 +39,11 @@ class PlantBox extends React.Component<{}, boxState> {
     constructor(props: any) {
         super(props);
         this.handleEvent = this.handleEvent.bind(this);
+        this.switchDataSource = this.switchDataSource.bind(this);
         this.state = {
         searchPlants: [],
-        selectedPlants: []
+        selectedPlants: [],
+        dataSrc: "local",
         };
     }
 
@@ -72,23 +75,48 @@ class PlantBox extends React.Component<{}, boxState> {
         }
     }
 
+    componentDidUpdate() {
 
-componentDidMount() {
-    this.showResults(data);
+    }
+
+    componentDidMount() {
+        //when backend is fixed switch to this
+        // const url = "http://localhost:8080/plants/list/";
+        
+        // fetch(url)
+        // .then(result => result.json())
+        // .then(
+        //     (result) => {
+        //     this.showResults(result);
+        //     console.log(result);
+        //     },
+        //     (error) => {
+        //     }
+        // )
+        this.showResults(data);
+    }
+
+switchDataSource() {
+    if (this.state.dataSrc == "local") {
+        this.setState({dataSrc: "api"});
+    } else {
+        this.setState({dataSrc: "local"})
+    }
 }
 
 render() {
     return (
         <div id="plantbox">
             <h1>Plant Select</h1>
-            <div id="search-plants" className="plants">
-                <p>Search for plants you would like to place in your garden.</p>
-                <p>Once you have found your plant, click on its name to add it to your list. To remove a plant from your list, simply click it again.</p>
-                <Search onSearch={this.handleSearch} />
-            <PlantList handleClick={this.handleEvent} plants={this.state.searchPlants} />
-            </div>
+            <button onClick={this.switchDataSource}>Switch data</button>
+                <div id="search-plants" className="plants">
+                    <p>Search for plants you would like to place in your garden.</p>
+                    <p>Once you have found your plant, click on its name to add it to your list. To remove a plant from your list, simply click it again.</p>
+                    <Search onSearch={this.handleSearch} />
+                    <PlantList handleClick={this.handleEvent} plants={this.state.searchPlants} />
+                </div>
             <div id="selected-plants" className="plants">
-            <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
+                <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
             </div>
 
             {/* <img src={placeholder} style={{ width: "600px" }} /> */}
