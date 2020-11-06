@@ -1,12 +1,17 @@
-import React, {useState} from "react";
+import { findAllByAltText } from "@testing-library/react";
+import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
-
+import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.24.02 PM.png"
+import './select.css';
 
 const data: Array<PlantProps> = [
     {name: "Daisy", id: 1},
-    {name: "Rose", id: 2}
+    {name: "Rose", id: 2},
+    {name: "Sunflower", id: 3},
+    {name: "Dandelion", id: 4},
+    {name: "Iris", id: 5},
+    {name: "Tulip", id: 6},
+    {name: "Hydrangea", id: 7},
 ]
 const plantsAndShrubsOptions = [
     'one', 'two'
@@ -35,9 +40,9 @@ let selectedPlants: Array<PlantProps> = [];
 
 type boxState = {
     searchPlants: Array<PlantProps>,
-    selectedPlants: Array<PlantProps>
-}
-  
+    selectedPlants: Array<PlantProps>,
+    dataSrc: string // TEMPORARY FOR TESTING 
+  }
 
 const Select = () => {
     return (
@@ -47,20 +52,23 @@ const Select = () => {
 
 
   
+// at some later point, we will need to lift the state here (and all other components) into app.tsx
 class PlantBox extends React.Component<{}, boxState> {
     constructor(props: any) {
         super(props);
         this.handleEvent = this.handleEvent.bind(this);
+        this.switchDataSource = this.switchDataSource.bind(this);
         this.state = {
         searchPlants: [],
-        selectedPlants: []
+        selectedPlants: [],
+        dataSrc: "local",
         };
     }
 
     showResults = (data: PlantProps[]) => {
         this.setState({
-        searchPlants: data,
-        selectedPlants: []
+            searchPlants: data,
+            selectedPlants: []
         })
     }
 
@@ -70,15 +78,48 @@ class PlantBox extends React.Component<{}, boxState> {
         const isInSearchResults = searchPlants.some(result => result.id === clickedPlant.id);
 
         this.setState({
-            // check which list clicked plant startss in and remove if it's in that one, add if it's not
+            // check which list clicked plant starts in and remove if it's in that one, add if it's not
             searchPlants: isInSearchResults ? searchPlants.filter(i => i.id  !== clickedPlant.id) : [...searchPlants, clickedPlant],
             selectedPlants: isInSearchResults ? [...selectedPlants, clickedPlant] : selectedPlants.filter(i => i.id !== clickedPlant.id)
         });
 }
+    handleSearch = () => {
+        let input = document.getElementById("search-input") as HTMLInputElement;
+        if (input.value) {
+            let searchText = input.value;
+            this.setState({searchPlants: data.filter((plant) => plant.name.toLowerCase().includes(searchText.toLowerCase()))});
+        } else {
+            this.setState({searchPlants: data});
+        }
+    }
 
+    componentDidUpdate() {
 
-componentDidMount() {
-    this.showResults(data);
+    }
+
+    componentDidMount() {
+        //when backend is fixed switch to this
+        // const url = "http://localhost:8080/plants/list/";
+        
+        // fetch(url)
+        // .then(result => result.json())
+        // .then(
+        //     (result) => {
+        //     this.showResults(result);
+        //     console.log(result);
+        //     },
+        //     (error) => {
+        //     }
+        // )
+        this.showResults(data);
+    }
+
+switchDataSource() {
+    if (this.state.dataSrc == "local") {
+        this.setState({dataSrc: "api"});
+    } else {
+        this.setState({dataSrc: "local"})
+    }
 }
     
     
@@ -86,44 +127,20 @@ componentDidMount() {
 
 render() {
     return (
-        <div className="plantbox">
-            <h1>Plant Selection</h1>
-            <div className="col-md-3"></div>
-            <form className="container-fluid col-md-6">
-                <p> Please select the plants you'd like to have in your Garden. Selecting plants from
-                each category will give you the best chance for a thriving garden because each category
-                of plants requires a different amount of sunlight. Once you have selected your
-                plant, click 'Next' to start building your garden!
-                </p>
-
-                
-                <Dropdown options={plantsAndShrubsOptions}  placeholder="Plants and Shrubs" /> <br></br>
-                <Dropdown options={smTreesOptions}   placeholder="Small Trees" /> <br></br>
-                <Dropdown options={mdTreesOptions}   placeholder="Medium-sized Trees" /> <br></br>
-                <Dropdown options={lgTreesOptions}  placeholder="Large Trees" /> <br></br>
-               
-            
-                <div id="search-plants">
+        <div id="plantbox">
+            <h1>Plant Select</h1>
+            <button onClick={this.switchDataSource}>Switch data</button>
+                <div id="search-plants" className="plants">
+                    <p>Search for plants you would like to place in your garden.</p>
+                    <p>Once you have found your plant, click on its name to add it to your list. To remove a plant from your list, simply click it again.</p>
+                    <Search onSearch={this.handleSearch} />
                     <PlantList handleClick={this.handleEvent} plants={this.state.searchPlants} />
                 </div>
-                <div id="selected-plants">
-                    <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
-                </div>
-            </form>
-            <div className="row">
+            <div id="selected-plants" className="plants">
+                <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
+            </div>
 
-          <div className="col-md-12">
-
-            <Link className="nav-link" to="/home">
-              Back
-            </Link>
-            <Link className="nav-link" to="/questionnaire">
-              Next
-            </Link>
-
-          </div>
-
-        </div>
+            {/* <img src={placeholder} style={{ width: "600px" }} /> */}
         </div>
         )
     }   
@@ -131,11 +148,29 @@ render() {
 
 const PlantList = (props: {plants: Array<PlantProps>, handleClick(plant: PlantProps): any}) => {
     return (
-    <ul>
+    <ul className="plant-list">
     {props.plants.map((item) => 
         <Plant plant={item} handleClick={props.handleClick} />
     )}
     </ul>)
+}
+
+type SearchProps = {
+    onSearch: () => void,
+}
+class Search extends React.Component<SearchProps, {}> {
+    constructor(props: any) {
+        super(props);
+        this.state = {};
+    }
+
+    render() {
+        return (
+            <div id="search">
+                <label>Begin typing to search</label><input onChange={this.props.onSearch} id="search-input" type="text"></input>
+            </div>
+        )
+    }
 }
 
 interface PlantDisProps {
