@@ -12,8 +12,9 @@ body {
     padding: 20px;
 }  
 .plant-list {
-    height: inherit;
-    scroll-behavior: auto;
+    height: 55%;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
 }
 #selected-plants {
     text-align: left;
