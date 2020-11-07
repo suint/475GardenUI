@@ -20,6 +20,6 @@
     "jsx": "react"
   },
   "include": [
-    "src"
+    "src", "interfaces.d.ts", "main.d.ts", "modules.d.ts"
   ]
 }

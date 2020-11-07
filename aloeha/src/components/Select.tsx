@@ -3,29 +3,28 @@ import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.24.02 PM.png"
 import './select.css';
+import Hover from "react-hover";
 
-const data: Array<PlantProps> = [
-    {name: "Daisy", id: 1},
-    {name: "Rose", id: 2},
-    {name: "Sunflower", id: 3},
-    {name: "Dandelion", id: 4},
-    {name: "Iris", id: 5},
-    {name: "Tulip", id: 6},
-    {name: "Hydrangea", id: 7},
-]
+// const data: Array<PlantProps> = [
+//     {name: "Daisy", id: 1},
+//     {name: "Rose", id: 2},
+//     {name: "Sunflower", id: 3},
+//     {name: "Dandelion", id: 4},
+//     {name: "Iris", id: 5},
+//     {name: "Tulip", id: 6},
+//     {name: "Hydrangea", id: 7},
+// ]
 
 type PlantProps = {
     name: string,
     id: number
 };
 
-let searchPlants: Array<PlantProps> = data;
-let selectedPlants: Array<PlantProps> = [];
-
 type boxState = {
-    searchPlants: Array<PlantProps>,
-    selectedPlants: Array<PlantProps>,
-  }
+    plants: Array<Plant>,
+    searchPlants: Array<Plant>,
+    selectedPlants: Array<Plant>,
+  };
 
 const Select = () => {
     return (
@@ -41,19 +40,13 @@ class PlantBox extends React.Component<{}, boxState> {
         super(props);
         this.handleEvent = this.handleEvent.bind(this);
         this.state = {
+        plants: [],
         searchPlants: [],
         selectedPlants: [],
         };
     }
 
-    showResults = (data: PlantProps[]) => {
-        this.setState({
-            searchPlants: data,
-            selectedPlants: []
-        })
-    }
-
-    handleEvent = (clickedPlant: PlantProps) => {
+    handleEvent = (clickedPlant: Plant) => {
         const { searchPlants, selectedPlants } = this.state;
         // checks if clicked plant is in search plants
         const isInSearchResults = searchPlants.some(result => result.id === clickedPlant.id);
@@ -68,31 +61,27 @@ class PlantBox extends React.Component<{}, boxState> {
         let input = document.getElementById("search-input") as HTMLInputElement;
         if (input.value) {
             let searchText = input.value;
-            this.setState({searchPlants: data.filter((plant) => plant.name.toLowerCase().includes(searchText.toLowerCase()))});
+            // TODO: search should search latin name + common names
+            this.setState({searchPlants: this.state.plants.filter((plant) => plant.latinName.toLowerCase().includes(searchText.toLowerCase()))});
         } else {
-            this.setState({searchPlants: data});
+            this.setState({searchPlants: this.state.plants});
         }
-    }
-
-    componentDidUpdate() {
-
     }
 
     componentDidMount() {
         //when backend is fixed switch to this
-        // const url = "http://localhost:8080/plants/list/";
+        const url = "http://localhost:8080/plants/list/";
         
-        // fetch(url)
-        // .then(result => result.json())
-        // .then(
-        //     (result) => {
-        //     this.showResults(result);
-        //     console.log(result);
-        //     },
-        //     (error) => {
-        //     }
-        // )
-        this.showResults(data);
+        fetch(url)
+        .then(result => result.json())
+        .then(
+            (result) => {
+            this.setState({plants: result});
+            console.log(result);
+            },
+            (error) => {
+            }
+        )
     }
     
 render() {
@@ -115,11 +104,11 @@ render() {
     }   
 }
 
-const PlantList = (props: {plants: Array<PlantProps>, handleClick(plant: PlantProps): any}) => {
+const PlantList = (props: {plants: Array<Plant>, handleClick(plant: Plant): any}) => {
     return (
     <ul className="plant-list">
     {props.plants.map((item) => 
-        <Plant plant={item} handleClick={props.handleClick} />
+        <PlantDisplay plant={item} handleClick={props.handleClick} />
     )}
     </ul>)
 }
@@ -143,13 +132,13 @@ class Search extends React.Component<SearchProps, {}> {
 }
 
 interface PlantDisProps {
-    plant: PlantProps,
-    handleClick(plant: PlantProps): any, 
+    plant: Plant,
+    handleClick(plant: Plant): any, 
 }
-class Plant extends React.Component<PlantDisProps, {}> {
+class PlantDisplay extends React.Component<PlantDisProps, {}> {
     render(){
         const { handleClick, plant } = this.props;
-        return <li onClick={() => handleClick(plant)}> {plant.name} </li>;
+        return <li onClick={() => handleClick(plant)}> {plant.latinName} </li>;
     }
 }
   
