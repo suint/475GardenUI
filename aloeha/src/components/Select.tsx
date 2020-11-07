@@ -89,7 +89,7 @@ render() {
         <div id="plantbox">
             <h1>Plant Select</h1>
                 <div id="search-plants" className="plants">
-                    <p>Search for plants you would like to place in your garden.</p>
+                    <p>Search for plants which already grow in your garden.</p>
                     <p>Once you have found your plant, click on its name to add it to your list. To remove a plant from your list, simply click it again.</p>
                     <Search onSearch={this.handleSearch} />
                     <PlantList handleClick={this.handleEvent} plants={this.state.searchPlants} />
