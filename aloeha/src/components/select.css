@@ -30,7 +30,7 @@ body {
 #search {
     margin: 1em 0;
 }
-input {
+#search-input {
     width: 100%;
 }
 
