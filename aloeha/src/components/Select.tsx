@@ -4,6 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.24.02 PM.png"
 import './select.css';
 import ReactHover, { Trigger, Hover } from "react-hover";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker";
 
 type boxState = {
     plants: Array<Plant>,
@@ -57,7 +58,7 @@ class PlantBox extends React.Component<{}, boxState> {
         //when backend is fixed switch to this
         const url = "http://localhost:8080/plants/list/";
         
-        fetch(url)
+        trackPromise(fetch(url)
         .then(result => result.json())
         .then(
             (result) => {
@@ -66,7 +67,7 @@ class PlantBox extends React.Component<{}, boxState> {
             },
             (error) => {
             }
-        )
+        ));
     }
     
 render() {
@@ -82,38 +83,35 @@ render() {
             <div id="selected-plants" className="plants">
                 <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
             </div>
-
-            {/* <img src={placeholder} style={{ width: "600px" }} /> */}
         </div>
         )
     }   
 }
 
 const PlantList = (props: {plants: Array<Plant>, handleClick(plant: Plant): any}) => {
-    return (
-    <ul className="plant-list">
-    {props.plants.map((item) => 
-        <PlantDisplay plant={item} handleClick={props.handleClick} />
-    )}
-    </ul>)
+    const { promiseInProgress } = usePromiseTracker();
+    if (promiseInProgress) {
+        return <p>Plant information loading...</p>
+    } else {
+        return (
+        <ul className="plant-list">
+        {props.plants.map((item) => 
+            <PlantDisplay plant={item} handleClick={props.handleClick} />
+        )}
+        </ul>)
+    }
 }
 
 type SearchProps = {
-    onSearch: () => void,
-}
-class Search extends React.Component<SearchProps, {}> {
-    constructor(props: any) {
-        super(props);
-        this.state = {};
-    }
+    onSearch: () => void
+};
 
-    render() {
-        return (
-            <div id="search">
-                <label>Begin typing to search</label><input onChange={this.props.onSearch} id="search-input" type="text"></input>
-            </div>
-        )
-    }
+const Search = (props: SearchProps) => {
+    return (
+        <div id="search">
+            <label>Begin typing to search</label><input onChange={props.onSearch} id="search-input" type="text"></input>
+        </div>
+    )
 }
 
 interface PlantDisProps {
@@ -126,18 +124,16 @@ const optionsCursorTrueWithMargin = {
     shiftY:0
 }
 
-class PlantDisplay extends React.Component<PlantDisProps, {}> {
-    render(){
-        const { handleClick, plant } = this.props;
-        return <ReactHover options={optionsCursorTrueWithMargin}>
-            <Trigger>
-                <li onClick={() => handleClick(plant)}> {plant.latinName} </li>
-            </Trigger>
-            <Hover>
-                <div>buttcracks</div>
-            </Hover>
-        </ReactHover>;
-    }
+const PlantDisplay = (props: PlantDisProps) => {
+    const { handleClick, plant } = props;
+    return <ReactHover options={optionsCursorTrueWithMargin}>
+        <Trigger>
+            <li onClick={() => handleClick(plant)}> {plant.latinName} </li>
+        </Trigger>
+        <Hover>
+            <div>buttcracks</div> {/*TODO: add actual information here lol */}
+        </Hover>
+    </ReactHover>
 }
   
 
