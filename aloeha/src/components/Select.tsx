@@ -3,22 +3,7 @@ import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.24.02 PM.png"
 import './select.css';
-import Hover from "react-hover";
-
-// const data: Array<PlantProps> = [
-//     {name: "Daisy", id: 1},
-//     {name: "Rose", id: 2},
-//     {name: "Sunflower", id: 3},
-//     {name: "Dandelion", id: 4},
-//     {name: "Iris", id: 5},
-//     {name: "Tulip", id: 6},
-//     {name: "Hydrangea", id: 7},
-// ]
-
-type PlantProps = {
-    name: string,
-    id: number
-};
+import ReactHover, { Trigger, Hover } from "react-hover";
 
 type boxState = {
     plants: Array<Plant>,
@@ -135,10 +120,23 @@ interface PlantDisProps {
     plant: Plant,
     handleClick(plant: Plant): any, 
 }
+const optionsCursorTrueWithMargin = {
+    followCursor:true,
+    shiftX:20,
+    shiftY:0
+}
+
 class PlantDisplay extends React.Component<PlantDisProps, {}> {
     render(){
         const { handleClick, plant } = this.props;
-        return <li onClick={() => handleClick(plant)}> {plant.latinName} </li>;
+        return <ReactHover options={optionsCursorTrueWithMargin}>
+            <Trigger>
+                <li onClick={() => handleClick(plant)}> {plant.latinName} </li>
+            </Trigger>
+            <Hover>
+                <div>buttcracks</div>
+            </Hover>
+        </ReactHover>;
     }
 }
   
