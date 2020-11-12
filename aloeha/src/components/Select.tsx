@@ -131,10 +131,30 @@ const PlantDisplay = (props: PlantDisProps) => {
             <li onClick={() => handleClick(plant)}> {plant.latinName} </li>
         </Trigger>
         <Hover>
-            <div>buttcracks</div> {/*TODO: add actual information here lol */}
+            <div className="plant-hover">
+                <PlantInfo plant={plant} />
+            </div> {/*TODO: add actual information here lol */}
         </Hover>
     </ReactHover>
 }
   
+export const PlantInfo = (props: {plant: Plant}) => {
+    const { plant } = props;
+    return (<div>
+        <h3>{plant.latinName}</h3>
+                {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "\n"})}</p>}
+                {plant.invasive && <span className="plant-badge yellow">invasive </span>}
+                {plant.delawareNative && <span className="plant-badge pink">native</span>}
+                {plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}
+                {plant.canopy >= 0 && <span className="plant-badge white">canopy: {plant.canopy}</span>}
+                {plant.moisture && <span className="plant-badge blue">{plant.moisture}</span>}
+                {plant.soilType && <span className="plant-badge black">{plant.soilType}</span>}
+                {plant.description && <span><h5>Description: </h5> <p>{plant.description}</p></span>}
+        </div>)
+}
+
+export const BloomTime = (props: {times: boolean[]}) => {
+
+}
 
 export default withRouter(Select);
