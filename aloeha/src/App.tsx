@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Navbar, Select, Start, Design, Questionnaire, Preview, Build} from "./components";
+import { Navbar, Select, Start, Design, Questionnaire, Preview, Build, Add } from "./components";
 import './App.css';
 
 //https://jsfiddle.net/vbwe1s44/ example 
@@ -103,6 +103,7 @@ export class App extends React.Component<{}, UserState>{
                                                                       onCheckBoxChange={this.handleCheckBox}
                                                                       onCBSeasonsChange={this.handleCBSeasons}
                                                                       onCBColorsChange={this.handleCBColors} />} />
+              <Route path="/add" exact render={() => <Add />} />
               <Route path="/preview" exact render={() => <Preview />} />
               <Route path="/build" exact render={() => <Build />} />
           </Switch>
