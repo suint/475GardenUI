@@ -88,7 +88,7 @@ class Select extends React.Component<any, boxState> {
             }
         ));
     }
-    
+     
 render() {
     return (
         <div id="plantbox">
