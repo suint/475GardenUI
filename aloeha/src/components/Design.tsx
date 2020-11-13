@@ -24,7 +24,11 @@ function Design(props: any) {
             
             <img src={placeholder} style={{ width: "600px" }} />
         </div>
+<<<<<<< HEAD
     </div>
+=======
+        </div>
+>>>>>>> adds accordian
     )
 }
 
