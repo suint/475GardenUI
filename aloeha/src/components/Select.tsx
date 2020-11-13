@@ -83,7 +83,7 @@ class PlantBox extends React.Component<{}, boxState> {
             }
         )
     }
-    
+     
 render() {
     return (
         <div id="plantbox">
