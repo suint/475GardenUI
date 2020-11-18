@@ -30,7 +30,7 @@
 interface Plant {
     id: string,
     latinName: string,
-    commonName: string[],
+    commonNames: string[],
     description: string,
     bloomTime: boolean[],
     light: number,
@@ -39,5 +39,6 @@ interface Plant {
     canopy: number,
     delawareNative: boolean,
     invasive: boolean,
-    source: string[]
+    source: string[],
+    image: string
 }

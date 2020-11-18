@@ -3,22 +3,8 @@ import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.24.02 PM.png"
 import './select.css';
-import Hover from "react-hover";
-
-// const data: Array<PlantProps> = [
-//     {name: "Daisy", id: 1},
-//     {name: "Rose", id: 2},
-//     {name: "Sunflower", id: 3},
-//     {name: "Dandelion", id: 4},
-//     {name: "Iris", id: 5},
-//     {name: "Tulip", id: 6},
-//     {name: "Hydrangea", id: 7},
-// ]
-
-type PlantProps = {
-    name: string,
-    id: number
-};
+import ReactHover, { Trigger, Hover } from "react-hover";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker";
 
 type boxState = {
     plants: Array<Plant>,
@@ -72,7 +58,7 @@ class PlantBox extends React.Component<{}, boxState> {
         //when backend is fixed switch to this
         const url = "http://localhost:8080/plants/list/";
         
-        fetch(url)
+        trackPromise(fetch(url)
         .then(result => result.json())
         .then(
             (result) => {
@@ -81,7 +67,7 @@ class PlantBox extends React.Component<{}, boxState> {
             },
             (error) => {
             }
-        )
+        ));
     }
     
 render() {
@@ -97,50 +83,83 @@ render() {
             <div id="selected-plants" className="plants">
                 <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
             </div>
-
-            {/* <img src={placeholder} style={{ width: "600px" }} /> */}
         </div>
         )
     }   
 }
 
 const PlantList = (props: {plants: Array<Plant>, handleClick(plant: Plant): any}) => {
-    return (
-    <ul className="plant-list">
-    {props.plants.map((item) => 
-        <PlantDisplay plant={item} handleClick={props.handleClick} />
-    )}
-    </ul>)
+    const { promiseInProgress } = usePromiseTracker();
+    if (promiseInProgress) {
+        return <p>Plant information loading...</p>
+    } else {
+        return (
+        <ul className="plant-list">
+        {props.plants.map((item) => 
+            <PlantDisplay plant={item} handleClick={props.handleClick} />
+        )}
+        </ul>)
+    }
 }
 
 type SearchProps = {
-    onSearch: () => void,
-}
-class Search extends React.Component<SearchProps, {}> {
-    constructor(props: any) {
-        super(props);
-        this.state = {};
-    }
+    onSearch: () => void
+};
 
-    render() {
-        return (
-            <div id="search">
-                <label>Begin typing to search</label><input onChange={this.props.onSearch} id="search-input" type="text"></input>
-            </div>
-        )
-    }
+const Search = (props: SearchProps) => {
+    return (
+        <div id="search">
+            <label>Begin typing to search</label><input onChange={props.onSearch} id="search-input" type="text"></input>
+        </div>
+    )
 }
 
 interface PlantDisProps {
     plant: Plant,
     handleClick(plant: Plant): any, 
 }
-class PlantDisplay extends React.Component<PlantDisProps, {}> {
-    render(){
-        const { handleClick, plant } = this.props;
-        return <li onClick={() => handleClick(plant)}> {plant.latinName} </li>;
-    }
+const optionsCursorTrueWithMargin = {
+    followCursor:true,
+    shiftX:20,
+    shiftY:0
+}
+
+const PlantDisplay = (props: PlantDisProps) => {
+    const { handleClick, plant } = props;
+    return <ReactHover options={optionsCursorTrueWithMargin}>
+        <Trigger>
+            <li onClick={() => handleClick(plant)}> {plant.latinName} </li>
+        </Trigger>
+        <Hover>
+                <PlantInfo plant={plant} />
+        </Hover>
+    </ReactHover>
 }
   
+// TODO: add images and bloom time
+export const PlantInfo = (props: {plant: Plant}) => {
+    const { plant } = props;
+    return (<div className="plant-hover">
+        <h3>{plant.latinName}</h3>
+                {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "\n"})}</p>}
+                {plant.invasive && <span className="plant-badge yellow">invasive </span>}
+                {plant.delawareNative && <span className="plant-badge pink">native</span>}
+                {plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}
+                {plant.canopy > 0 && <span className="plant-badge green">canopy: {plant.canopy}</span>}
+                {plant.moisture && <span className="plant-badge blue">{plant.moisture}</span>}
+                {plant.soilType && <span className="plant-badge brown">{plant.soilType}</span>}
+                {plant.bloomTime && <BloomTime times={plant.bloomTime} />}
+                {plant.description && <span> <h5>{plant.description}</h5></span>}
+        </div>)
+}
+
+export const BloomTime = (props: {times: boolean[]}) => {
+    const { times } = props;
+    return (
+        <div className="bloom-times">
+            {times.map((month: boolean) => month ? <span className="bloom-yes" /> : <span className="bloom-no" />)}
+        </div>
+    )
+}
 
 export default withRouter(Select);
