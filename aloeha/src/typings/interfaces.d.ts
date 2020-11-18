@@ -39,5 +39,6 @@ interface Plant {
     canopy: number,
     delawareNative: boolean,
     invasive: boolean,
-    source: string[]
+    source: string[],
+    image: string
 }
