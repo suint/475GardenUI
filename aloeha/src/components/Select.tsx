@@ -13,12 +13,13 @@ import { usePromiseTracker, trackPromise } from "react-promise-tracker";
 //     }
 
 type boxState = {
-    plants: Array<Plant>,
-    searchPlants: Array<Plant>,
-    selectedPlants: Array<Plant>,
+    plants: Plant[],
+    searchPlants: Plant[],
+    selectedPlants: Plant[],
 };
 type boxProps = {
     onPlantSelect: (e: Plant[]) => void,
+    existingPlants: Plant[]
 };
   
 // at some later point, we will need to lift the state here (and all other components) into app.tsx
@@ -29,7 +30,7 @@ class Select extends React.Component<any, boxState> {
         this.state = {
             plants: [],
             searchPlants: [],
-            selectedPlants: [],
+            selectedPlants: [... props.existingPlants],
         };
     }
 

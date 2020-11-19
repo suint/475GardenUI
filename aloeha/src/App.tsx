@@ -93,7 +93,8 @@ export class App extends React.Component<{}, UserState>{
           <Switch>
               <Route path="/" exact render={() => <Start />} />
               <Route path="/select" exact render={() => <Select
-                                                                      onPlantSelect={this.handleExistingPlantSelect} />} />
+                                                                      onPlantSelect={this.handleExistingPlantSelect} 
+                                                                      existingPlants={this.state.existingPlants}/>} />
               <Route path="/design" exact render={() => <Design />} />
               <Route path="/questionnaire" exact render={() => <Questionnaire
                                                                       newUser={this.state.newUser}
