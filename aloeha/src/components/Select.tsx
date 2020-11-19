@@ -6,29 +6,31 @@ import './select.css';
 import ReactHover, { Trigger, Hover } from "react-hover";
 import { usePromiseTracker, trackPromise } from "react-promise-tracker";
 
+// const Select = (props: boxProps) => {
+//     return (
+//         <PlantBox onPlantSelect={props.onPlantSelect}  />
+//         )
+//     }
+
 type boxState = {
-    plants: Array<Plant>,
-    searchPlants: Array<Plant>,
-    selectedPlants: Array<Plant>,
-  };
-
-const Select = () => {
-    return (
-        <PlantBox />
-    )
-}
-
-
+    plants: Plant[],
+    searchPlants: Plant[],
+    selectedPlants: Plant[],
+};
+type boxProps = {
+    onPlantSelect: (e: Plant[]) => void,
+    existingPlants: Plant[]
+};
   
 // at some later point, we will need to lift the state here (and all other components) into app.tsx
-class PlantBox extends React.Component<{}, boxState> {
-    constructor(props: any) {
+class Select extends React.Component<any, boxState> {
+    constructor(props: any) { // TODO: fix "any" props
         super(props);
         this.handleEvent = this.handleEvent.bind(this);
         this.state = {
-        plants: [],
-        searchPlants: [],
-        selectedPlants: [],
+            plants: [],
+            searchPlants: [],
+            selectedPlants: [... props.existingPlants],
         };
     }
 
@@ -36,12 +38,15 @@ class PlantBox extends React.Component<{}, boxState> {
         const { searchPlants, selectedPlants } = this.state;
         // checks if clicked plant is in search plants
         const isInSearchResults = searchPlants.some(result => result.id === clickedPlant.id);
+        const newSearchPlants = isInSearchResults ? searchPlants.filter(i => i.id  !== clickedPlant.id) : [...searchPlants, clickedPlant];
+        const newSelectedPlants = isInSearchResults ? [...selectedPlants, clickedPlant] : selectedPlants.filter(i => i.id !== clickedPlant.id);
 
         this.setState({
             // check which list clicked plant starts in and remove if it's in that one, add if it's not
-            searchPlants: isInSearchResults ? searchPlants.filter(i => i.id  !== clickedPlant.id) : [...searchPlants, clickedPlant],
-            selectedPlants: isInSearchResults ? [...selectedPlants, clickedPlant] : selectedPlants.filter(i => i.id !== clickedPlant.id)
-        });
+            searchPlants: newSearchPlants,
+            selectedPlants: newSelectedPlants
+        })
+        this.props.onPlantSelect(newSelectedPlants);
 }
     handleSearch = () => {
         let input = document.getElementById("search-input") as HTMLInputElement;
@@ -96,7 +101,7 @@ const PlantList = (props: {plants: Array<Plant>, handleClick(plant: Plant): any}
         return (
         <ul className="plant-list">
         {props.plants.map((item) => 
-            <PlantDisplay plant={item} handleClick={props.handleClick} />
+            <PlantDisplay plant={item} handleClick={props.handleClick} key={item.id} />
         )}
         </ul>)
     }
@@ -148,7 +153,7 @@ export const PlantInfo = (props: {plant: Plant}) => {
                 {plant.canopy > 0 && <span className="plant-badge green">canopy: {plant.canopy}</span>}
                 {plant.moisture && <span className="plant-badge blue">{plant.moisture}</span>}
                 {plant.soilType && <span className="plant-badge brown">{plant.soilType}</span>}
-                {plant.bloomTime && <BloomTime times={plant.bloomTime} />}
+                {/* {plant.bloomTime && <BloomTime times={plant.bloomTime} />} */}
                 {plant.description && <span> <h5>{plant.description}</h5></span>}
         </div>)
 }

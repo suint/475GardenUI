@@ -11,21 +11,7 @@ class Questionnaire extends Component {
     super(props);
 
     this.state = {
-      newUser: {
-        name: '',
-        length: '',
-        width: '',
-        plotItems: [],
-        moisture: '',
-        soil: '',
-        sunlight: '',
-        seasonsWanted: [],
-        colorsWanted: [],
-        gender: '',
-        skills: []
-
-      },
-
+      
       plotItemOptions: ['Bench', 'Birdbath', 'Fence', 'Flamingo', 'Forest',
         'Gnome', 'Path', 'Patio', 'Playground', 'Pool',
         'Road', 'Rock', 'Shed', 'TextLabel', 'Other'],
@@ -44,21 +30,24 @@ class Questionnaire extends Component {
     this.handleCheckBox = this.handleCheckBox.bind(this);
     this.handleCBSeasons = this.handleCBSeasons.bind(this);
     this.handleCBColors = this.handleCBColors.bind(this);
-    this.handleInput = this.handleInput.bind(this);
+    this.handleStringInput = this.handleStringInput.bind(this);
+    this.handleNumInput = this.handleNumInput.bind(this);
   }
 
   /* This lifecycle hook gets executed when the component mounts */
 
 
-  handleInput(e) {
+
+  handleStringInput(e) {
     let value = e.target.value;
     let name = e.target.name;
-    this.setState(prevState => ({
-      newUser:
-      {
-        ...prevState.newUser, [name]: value
-      }
-    }), () => console.log(this.state.newUser))
+    this.props.onInputStringChange(value,name)
+  }
+
+  handleNumInput(e) {
+    let value = e.target.value;
+    let name = e.target.name;
+    this.props.onInputNumChange(value,name)
   }
 
 
@@ -67,18 +56,12 @@ class Questionnaire extends Component {
     const newSelection = e.target.value;
     let newSelectionArray;
 
-
-    if (this.state.newUser.plotItems.indexOf(newSelection) > -1) {
-      newSelectionArray = this.state.newUser.plotItems.filter(s => s !== newSelection)
+    if (this.props.newUser.plotItems.indexOf(newSelection) > -1) {
+      newSelectionArray = this.props.newUser.plotItems.filter(s => s !== newSelection)
     } else {
-      newSelectionArray = [...this.state.newUser.plotItems, newSelection];
+      newSelectionArray = [...this.props.newUser.plotItems, newSelection];
     }
-
-    this.setState(prevState => ({
-      newUser:
-        { ...prevState.newUser, plotItems: newSelectionArray }
-    })
-    )
+    this.props.onCheckBoxChange(newSelectionArray)
   }
 
   handleCBSeasons(e) {
@@ -86,18 +69,12 @@ class Questionnaire extends Component {
     const newSelection = e.target.value;
     let newSelectionArray;
 
-
-    if (this.state.newUser.seasonsWanted.indexOf(newSelection) > -1) {
-      newSelectionArray = this.state.newUser.seasonsWanted.filter(s => s !== newSelection)
+    if (this.props.newUser.seasonsWanted.indexOf(newSelection) > -1) {
+      newSelectionArray = this.props.newUser.seasonsWanted.filter(s => s !== newSelection)
     } else {
-      newSelectionArray = [...this.state.newUser.seasonsWanted, newSelection];
+      newSelectionArray = [...this.props.newUser.seasonsWanted, newSelection];
     }
-
-    this.setState(prevState => ({
-      newUser:
-        { ...prevState.newUser, seasonsWanted: newSelectionArray }
-    })
-    )
+    this.props.onCBSeasonsChange(newSelectionArray)
   }
 
   handleCBColors(e) {
@@ -105,18 +82,12 @@ class Questionnaire extends Component {
     const newSelection = e.target.value;
     let newSelectionArray;
 
-
-    if (this.state.newUser.colorsWanted.indexOf(newSelection) > -1) {
-      newSelectionArray = this.state.newUser.colorsWanted.filter(s => s !== newSelection)
+    if (this.props.newUser.colorsWanted.indexOf(newSelection) > -1) {
+      newSelectionArray = this.props.newUser.colorsWanted.filter(s => s !== newSelection)
     } else {
-      newSelectionArray = [...this.state.newUser.colorsWanted, newSelection];
+      newSelectionArray = [...this.props.newUser.colorsWanted, newSelection];
     }
-
-    this.setState(prevState => ({
-      newUser:
-        { ...prevState.newUser, colorsWanted: newSelectionArray }
-    })
-    )
+    this.props.onCBColorsChange(newSelectionArray);
   }
 
   handleFormSubmit(e) {
@@ -151,37 +122,40 @@ class Questionnaire extends Component {
             Click 'Next' to see your plant suggestions</p>
 
           {/* Garden Name */}
-          <Input inputType={'text'}
+          <Input inputtype={'text'}
             title={'Garden Name:'}
             name={'name'}
-            value={this.state.newUser.name}
+            value={this.props.newUser.name}
             placeholder={'Enter your Garden Name'}
-            handleChange={this.handleInput}
+            handleChange={this.handleStringInput}
+            key="text1"
 
           />
-          <div class="form-row">
+          <div className="form-row">
             <h4> Garden Dimensions</h4>
-            <div class="form-group col-md-6">
+            <div className="form-group col-md-6">
               {/* Garden Length */}
-              <Input inputType={'number'}
+              <Input inputtype={'number'}
                 name={'length'}
                 title={'Length'}
-                value={this.state.newUser.length}
+                value={this.props.newUser.length}
                 placeholder={'Garden Length'}
-                handleChange={this.handleInput}
+                handleChange={this.handleNumInput}
+                key="num1"
               />
             </div>
 
-            <div class="form-group col-md-6
+            <div className="form-group col-md-6
               ">
 
               {/* Garden Width */}
-              <Input inputType={'number'}
+              <Input inputtype={'number'}
                 name={'width'}
                 title={'Width'}
-                value={this.state.newUser.width}
+                value={this.props.newUser.width}
                 placeholder={'Garden Width'}
-                handleChange={this.handleInput}
+                handleChange={this.handleNumInput}
+                key="num2"
               />
             </div>
           </div>
@@ -190,51 +164,57 @@ class Questionnaire extends Component {
           <CheckBox title={'Are any of the following in/near your plot?'}
             name={'plotItems'}
             options={this.state.plotItemOptions}
-            selectedOptions={this.state.newUser.plotItems}
+            selectedOptions={this.props.newUser.plotItems}
             handleChange={this.handleCheckBox}
+            key="check1"
           />
 
           {/* Garden Moisture Level */}
           <Select title={'Garden Moisture Level'}
             name={'moisture'}
             options={this.state.moistureOptions}
-            value={this.state.newUser.moisture}
+            value={this.props.newUser.moisture}
             placeholder={'Select Moisture Level'}
             handleChange={this.handleInput}
+            key="check2"
           />
 
           {/* Garden Soil Type */}
           <Select title={'Garden Soil Type'}
             name={'soil'}
             options={this.state.soilOptions}
-            value={this.state.newUser.soil}
+            value={this.props.newUser.soil}
             placeholder={'Select Soil Type'}
             handleChange={this.handleInput}
+            key="sel1"
           />
 
           {/* Garden Sunlight Level */}
           <Select title={'Garden Sunlight Level'}
             name={'sunlight'}
             options={this.state.sunlightOptions}
-            value={this.state.newUser.sunlight}
+            value={this.props.newUser.sunlight}
             placeholder={'Select Sunlight Level'}
             handleChange={this.handleInput}
+            key="sel2"
           />
 
           {/* Preferred Blooming seasons */}
           <CheckBox title={'When would you like to see your garden bloom? (Select all that apply)'}
             name={'seasonsWanted'}
             options={this.state.seasons}
-            selectedOptions={this.state.newUser.seasonsWanted}
+            selectedOptions={this.props.newUser.seasonsWanted}
             handleChange={this.handleCBSeasons}
+            key="check3"
           />
 
           {/*Color blooms in garden*/}
           <CheckBox title={'What color blooms would you like to see in your garden? (select all that apply)'}
             name={'colorsWanted'}
             options={this.state.colorOptions}
-            selectedOptions={this.state.newUser.colorsWanted}
+            selectedOptions={this.props.newUser.colorsWanted}
             handleChange={this.handleCBColors}
+            key="check4"
           />
 
 
@@ -247,9 +227,9 @@ class Questionnaire extends Component {
 
         </form>
 
-        <div class="row">
+        <div className="row">
 
-          <div class="col-md-12">
+          <div className="col-md-12">
 
             <Link className="nav-link" to="/select">
               Back
