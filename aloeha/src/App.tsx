@@ -81,9 +81,7 @@ export class App extends React.Component<{}, UserState>{
   }
 
   handleExistingPlantSelect(e: Plant[]) {
-    const { existingPlants } = this.state;
-    const updatePlant = existingPlants.concat(e);
-    this.setState({existingPlants: updatePlant});
+    this.setState({existingPlants: e});
     console.log(this.state);
   }
 
