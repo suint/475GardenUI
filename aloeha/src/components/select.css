@@ -46,6 +46,7 @@ li:hover {
     background-color: mintcream;
     padding: .5rem 2rem;
     width:700px;
+    white-space: pre-wrap;
 }
 .plant-badge {
     padding: .7rem;
