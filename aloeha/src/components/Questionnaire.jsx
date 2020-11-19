@@ -87,7 +87,7 @@ class Questionnaire extends Component {
     } else {
       newSelectionArray = [...this.props.newUser.colorsWanted, newSelection];
     }
-    this.props.onCBColorsChange(newSelectionArray)
+    this.props.onCBColorsChange(newSelectionArray);
   }
 
   handleFormSubmit(e) {
@@ -122,37 +122,40 @@ class Questionnaire extends Component {
             Click 'Next' to see your plant suggestions</p>
 
           {/* Garden Name */}
-          <Input inputType={'text'}
+          <Input inputtype={'text'}
             title={'Garden Name:'}
             name={'name'}
             value={this.props.newUser.name}
             placeholder={'Enter your Garden Name'}
             handleChange={this.handleStringInput}
+            key="text1"
 
           />
-          <div class="form-row">
+          <div className="form-row">
             <h4> Garden Dimensions</h4>
-            <div class="form-group col-md-6">
+            <div className="form-group col-md-6">
               {/* Garden Length */}
-              <Input inputType={'number'}
+              <Input inputtype={'number'}
                 name={'length'}
                 title={'Length'}
                 value={this.props.newUser.length}
                 placeholder={'Garden Length'}
                 handleChange={this.handleNumInput}
+                key="num1"
               />
             </div>
 
-            <div class="form-group col-md-6
+            <div className="form-group col-md-6
               ">
 
               {/* Garden Width */}
-              <Input inputType={'number'}
+              <Input inputtype={'number'}
                 name={'width'}
                 title={'Width'}
                 value={this.props.newUser.width}
                 placeholder={'Garden Width'}
                 handleChange={this.handleNumInput}
+                key="num2"
               />
             </div>
           </div>
@@ -163,6 +166,7 @@ class Questionnaire extends Component {
             options={this.state.plotItemOptions}
             selectedOptions={this.props.newUser.plotItems}
             handleChange={this.handleCheckBox}
+            key="check1"
           />
 
           {/* Garden Moisture Level */}
@@ -172,6 +176,7 @@ class Questionnaire extends Component {
             value={this.props.newUser.moisture}
             placeholder={'Select Moisture Level'}
             handleChange={this.handleInput}
+            key="check2"
           />
 
           {/* Garden Soil Type */}
@@ -181,6 +186,7 @@ class Questionnaire extends Component {
             value={this.props.newUser.soil}
             placeholder={'Select Soil Type'}
             handleChange={this.handleInput}
+            key="sel1"
           />
 
           {/* Garden Sunlight Level */}
@@ -190,6 +196,7 @@ class Questionnaire extends Component {
             value={this.props.newUser.sunlight}
             placeholder={'Select Sunlight Level'}
             handleChange={this.handleInput}
+            key="sel2"
           />
 
           {/* Preferred Blooming seasons */}
@@ -198,6 +205,7 @@ class Questionnaire extends Component {
             options={this.state.seasons}
             selectedOptions={this.props.newUser.seasonsWanted}
             handleChange={this.handleCBSeasons}
+            key="check3"
           />
 
           {/*Color blooms in garden*/}
@@ -206,6 +214,7 @@ class Questionnaire extends Component {
             options={this.state.colorOptions}
             selectedOptions={this.props.newUser.colorsWanted}
             handleChange={this.handleCBColors}
+            key="check4"
           />
 
 
@@ -218,9 +227,9 @@ class Questionnaire extends Component {
 
         </form>
 
-        <div class="row">
+        <div className="row">
 
-          <div class="col-md-12">
+          <div className="col-md-12">
 
             <Link className="nav-link" to="/select">
               Back

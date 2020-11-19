@@ -8,9 +8,8 @@ import './App.css';
 // replace later with api lookup
 
 type UserState = {
-
-  newUser: User
-
+  newUser: User,
+  existingPlants: Plant[]
 };
 
 export class App extends React.Component<{}, UserState>{
@@ -28,13 +27,15 @@ export class App extends React.Component<{}, UserState>{
         sunlight: '',
         seasonsWanted: [],
         colorsWanted: []
-      }
+      },
+      existingPlants: []
     }
     this.handleCheckBox = this.handleCheckBox.bind(this);
     this.handleCBSeasons = this.handleCBSeasons.bind(this);
     this.handleCBColors = this.handleCBColors.bind(this);
     this.handleNumInput = this.handleNumInput.bind(this);
     this.handleStringInput = this.handleStringInput.bind(this);
+    this.handleExistingPlantSelect = this.handleExistingPlantSelect.bind(this);
 
   }
 
@@ -44,12 +45,14 @@ export class App extends React.Component<{}, UserState>{
     const updateUser = {...newUser, [name]: value}
     this.setState({newUser: updateUser})
 
+    console.log(this.state);
   }
 
   handleStringInput( value: string, name: string) {
     const { newUser } = this.state
     const updateUser = {...newUser, [name]: value}
     this.setState({newUser: updateUser})
+    console.log(this.state);
 
   }
 
@@ -57,23 +60,32 @@ export class App extends React.Component<{}, UserState>{
     const { newUser } = this.state
     const updateUser = {...newUser, plotItems: e}
     this.setState({newUser: updateUser})
+    console.log(this.state);
     
   }
 
   handleCBSeasons(e: string[]) {
 
-    const { newUser } = this.state
-    const updateUser = {...newUser, seasonsWanted: e}
-    this.setState({newUser: updateUser})
+    const { newUser } = this.state;
+    const updateUser = {...newUser, seasonsWanted: e};
+    this.setState({newUser: updateUser});
+    console.log(this.state);
     
   }
 
   handleCBColors(e: string[]) {
-    const { newUser } = this.state
-    const updateUser = {...newUser, colorsWanted: e}
-    this.setState({newUser: updateUser})
+    const { newUser } = this.state;
+    const updateUser = {...newUser, colorsWanted: e};
+    this.setState({newUser: updateUser});
+    console.log(this.state);
   }
 
+  handleExistingPlantSelect(e: Plant[]) {
+    const { existingPlants } = this.state;
+    const updatePlant = existingPlants.concat(e);
+    this.setState({existingPlants: updatePlant});
+    console.log(this.state);
+  }
 
   render() {
 
@@ -81,18 +93,19 @@ export class App extends React.Component<{}, UserState>{
       <div className="App">
         <Router>
           <Switch>
-              <Route path="/" exact component={() => <Start />} />
-              <Route path="/select" exact component={() => <Select />} />
-              <Route path="/design" exact component={() => <Design />} />
-              <Route path="/questionnaire" exact component={() => <Questionnaire
+              <Route path="/" exact render={() => <Start />} />
+              <Route path="/select" exact render={() => <Select
+                                                                      onPlantSelect={this.handleExistingPlantSelect} />} />
+              <Route path="/design" exact render={() => <Design />} />
+              <Route path="/questionnaire" exact render={() => <Questionnaire
                                                                       newUser={this.state.newUser}
                                                                       onInputNumChange={this.handleNumInput}
                                                                       onInputStringChange={this.handleStringInput}
                                                                       onCheckBoxChange={this.handleCheckBox}
                                                                       onCBSeasonsChange={this.handleCBSeasons}
                                                                       onCBColorsChange={this.handleCBColors} />} />
-              <Route path="/preview" exact component={() => <Preview />} />
-              <Route path="/build" exact component={() => <Build />} />
+              <Route path="/preview" exact render={() => <Preview />} />
+              <Route path="/build" exact render={() => <Build />} />
           </Switch>
           <Navbar />
         </Router>

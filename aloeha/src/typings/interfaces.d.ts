@@ -39,12 +39,8 @@ interface Plant {
     canopy: number,
     delawareNative: boolean,
     invasive: boolean,
-<<<<<<< HEAD
     source: string[],
     image: string
-=======
-    source: string[]
->>>>>>> 3f10cc7e29fe2d9e8ea5ec31e3b9a0a7013122c7
 }
 
 interface User {
