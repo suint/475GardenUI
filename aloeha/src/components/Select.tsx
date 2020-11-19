@@ -38,13 +38,15 @@ class Select extends React.Component<any, boxState> {
         const { searchPlants, selectedPlants } = this.state;
         // checks if clicked plant is in search plants
         const isInSearchResults = searchPlants.some(result => result.id === clickedPlant.id);
+        const newSearchPlants = isInSearchResults ? searchPlants.filter(i => i.id  !== clickedPlant.id) : [...searchPlants, clickedPlant];
+        const newSelectedPlants = isInSearchResults ? [...selectedPlants, clickedPlant] : selectedPlants.filter(i => i.id !== clickedPlant.id);
 
         this.setState({
             // check which list clicked plant starts in and remove if it's in that one, add if it's not
-            searchPlants: isInSearchResults ? searchPlants.filter(i => i.id  !== clickedPlant.id) : [...searchPlants, clickedPlant],
-            selectedPlants: isInSearchResults ? [...selectedPlants, clickedPlant] : selectedPlants.filter(i => i.id !== clickedPlant.id)
+            searchPlants: newSearchPlants,
+            selectedPlants: newSelectedPlants
         })
-        this.props.onPlantSelect(this.state.selectedPlants);
+        this.props.onPlantSelect(newSelectedPlants);
 }
     handleSearch = () => {
         let input = document.getElementById("search-input") as HTMLInputElement;
