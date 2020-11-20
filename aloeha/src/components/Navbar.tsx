@@ -22,6 +22,9 @@ function Navbar(props: any) {
         <Link className="nav-link" to={"/build"}>
             Build
         </Link>
+        <Link className="nav-link" to={"/instructions"}>
+            Instructions
+        </Link>
     </div>
   );
 } 
