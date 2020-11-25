@@ -79,15 +79,29 @@ render() {
     return (
         <div id="plantbox">
             <h1>Plant Select</h1>
-                <div id="search-plants" className="plants">
-                    <p>Search for plants which already grow in your garden.</p>
-                    <p>Once you have found your plant, click on its name to add it to your list. To remove a plant from your list, simply click it again.</p>
-                    <Search onSearch={this.handleSearch} />
-                    <PlantList handleClick={this.handleEvent} plants={this.state.searchPlants} />
-                </div>
+            <div id="search-plants" className="plants">
+                <p>Search for plants which already grow in your garden.</p>
+                <p>Once you have found your plant, click on its name to add it to your list. To remove a plant from your list, simply click it again.</p>
+                <Search onSearch={this.handleSearch} />
+                <PlantList handleClick={this.handleEvent} plants={this.state.searchPlants} />
+            </div>
             <div id="selected-plants" className="plants">
                 <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
             </div>
+        <div className="row">
+
+          <div className="col-md-12">
+
+            <Link className="nav-link" to="/">
+              Back
+            </Link>
+            <Link className="nav-link" to="/questionnaire">
+              Next
+            </Link>
+
+          </div>
+
+        </div>
         </div>
         )
     }   
