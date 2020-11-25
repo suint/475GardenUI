@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+.nav-link {
+  background-color: white;
+  font-weight: bold;
+  padding: .5em 1em;
+  margin: .2em .5em;
+}
