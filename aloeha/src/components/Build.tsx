@@ -9,9 +9,6 @@ function Build(props: any) {
         <div id="design">
             <h1>Build widget goes here</h1>
             <img src={placeholder} style={{ width: "600px" }} />
-            <Link className="nav-link" to="/preview">
-                Back
-            </Link>
         </div>
     )
 }
