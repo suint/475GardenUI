@@ -53,10 +53,24 @@ class Select extends React.Component<any, boxState> {
         if (input.value) {
             let searchText = input.value;
             // TODO: search should search latin name + common names
-            this.setState({searchPlants: this.state.plants.filter((plant) => plant.latinName.toLowerCase().includes(searchText.toLowerCase()))});
+            if (searchText.length >= 3) {
+                const newSearchPlants = this.state.plants.filter((plant) => this.plantMatch(plant, searchText) );
+                this.setState({searchPlants: newSearchPlants});
+            }
         } else {
             this.setState({searchPlants: this.state.plants});
         }
+    }
+
+    plantMatch = (plant: Plant, query: string) => {
+        var plantText = plant.latinName;
+        if (plant.commonNames) {
+            plantText = plantText + plant.commonNames.join(" ");
+        }
+        if (plantText.toLowerCase().search(query.toLowerCase()) > 0) {
+            return true;
+        }
+        return false;
     }
 
     componentDidMount() {
@@ -128,7 +142,7 @@ type SearchProps = {
 const Search = (props: SearchProps) => {
     return (
         <div id="search">
-            <label>Begin typing to search</label><input onChange={props.onSearch} id="search-input" type="text"></input>
+            <label>Type at least three letters to search</label><input onChange={props.onSearch} id="search-input" type="text"></input>
         </div>
     )
 }
@@ -155,7 +169,7 @@ const PlantDisplay = (props: PlantDisProps) => {
     </ReactHover>
 }
   
-// TODO: add images and bloom time
+// TODO: add bloom time
 export const PlantInfo = (props: {plant: Plant}) => {
     const { plant } = props;
     return (<div className="plant-hover">

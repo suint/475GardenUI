@@ -11,6 +11,9 @@ body {
     max-height: 100%;
     max-width: 300px;
 }
+.carousel .slide {
+    background-color: transparent;
+}
 .plants {
     width: 50%;
     float: left;
