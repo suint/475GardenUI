@@ -1,7 +1,6 @@
 import { findAllByAltText } from "@testing-library/react";
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.24.02 PM.png"
 import './select.css';
 import ReactHover, { Trigger, Hover } from "react-hover";
 import { usePromiseTracker, trackPromise } from "react-promise-tracker";

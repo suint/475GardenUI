@@ -1,0 +1,41 @@
+
+#add {
+    margin: auto;
+    width: 80%;
+    height:40em;
+}
+.plants {
+    float: left;
+    padding: 20px;
+    height: inherit;
+}  
+#suggested-plants {
+    width: 40%;
+    background-color:#a1ca28;
+    text-align: left;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+}
+#garden-plants {
+    width: 60%;
+    background-color:white;
+    text-align: left;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+}
+.Collapsible__trigger {
+    display: block;
+    font-weight: 400;
+    text-decoration: none;
+    color: grey;
+    position: relative;
+    border: 1px solid white;
+    padding: 10px;
+    background: #85144b;
+    color: white;
+  }
+.Collapsible__contentInner img {
+    width: 90%;
+    padding:1em;
+}
+  
