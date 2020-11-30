@@ -1,8 +1,8 @@
-import { findAllByAltText } from "@testing-library/react";
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.24.02 PM.png"
+import { Carousel } from "react-responsive-carousel";
 import './select.css';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ReactHover, { Trigger, Hover } from "react-hover";
 import { usePromiseTracker, trackPromise } from "react-promise-tracker";
 
@@ -53,10 +53,24 @@ class Select extends React.Component<any, boxState> {
         if (input.value) {
             let searchText = input.value;
             // TODO: search should search latin name + common names
-            this.setState({searchPlants: this.state.plants.filter((plant) => plant.latinName.toLowerCase().includes(searchText.toLowerCase()))});
+            if (searchText.length >= 3) {
+                const newSearchPlants = this.state.plants.filter((plant) => this.plantMatch(plant, searchText) );
+                this.setState({searchPlants: newSearchPlants});
+            }
         } else {
             this.setState({searchPlants: this.state.plants});
         }
+    }
+
+    plantMatch = (plant: Plant, query: string) => {
+        var plantText = plant.latinName;
+        if (plant.commonNames) {
+            plantText = plantText + plant.commonNames.join(" ");
+        }
+        if (plantText.toLowerCase().search(query.toLowerCase()) > 0) {
+            return true;
+        }
+        return false;
     }
 
     componentDidMount() {
@@ -128,7 +142,7 @@ type SearchProps = {
 const Search = (props: SearchProps) => {
     return (
         <div id="search">
-            <label>Begin typing to search</label><input onChange={props.onSearch} id="search-input" type="text"></input>
+            <label>Type at least three letters to search</label><input onChange={props.onSearch} id="search-input" type="text"></input>
         </div>
     )
 }
@@ -139,8 +153,8 @@ interface PlantDisProps {
 }
 const optionsCursorTrueWithMargin = {
     followCursor:true,
-    shiftX:20,
-    shiftY:0
+    shiftX:50,
+    shiftY:-250
 }
 
 const PlantDisplay = (props: PlantDisProps) => {
@@ -155,12 +169,13 @@ const PlantDisplay = (props: PlantDisProps) => {
     </ReactHover>
 }
   
-// TODO: add images and bloom time
+// TODO: add bloom time
 export const PlantInfo = (props: {plant: Plant}) => {
     const { plant } = props;
     return (<div className="plant-hover">
         <h3>{plant.latinName}</h3>
-                {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "\n"})}</p>}
+                {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "  "})}</p>}
+                {plant.images && <ImageCarousel images={plant.images} />}
                 {plant.invasive && <span className="plant-badge yellow">invasive </span>}
                 {plant.delawareNative && <span className="plant-badge pink">native</span>}
                 {plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}
@@ -168,8 +183,20 @@ export const PlantInfo = (props: {plant: Plant}) => {
                 {plant.moisture && <span className="plant-badge blue">{plant.moisture}</span>}
                 {plant.soilType && <span className="plant-badge brown">{plant.soilType}</span>}
                 {/* {plant.bloomTime && <BloomTime times={plant.bloomTime} />} */}
-                {plant.description && <span> <h5>{plant.description}</h5></span>}
+                {plant.description && <div className="description"> <p>{plant.description}</p></div>}
         </div>)
+}
+
+export const ImageCarousel = (props: {images: string[]}) => {
+    return (
+        <Carousel autoPlay infiniteLoop>
+            {props.images.map(img => 
+                <div>
+                    <img src={img} />
+                </div>
+                )}
+        </Carousel>
+    )
 }
 
 export const BloomTime = (props: {times: boolean[]}) => {

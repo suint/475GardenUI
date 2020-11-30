@@ -6,11 +6,22 @@ body {
     width: 80%;
     height:40em;
 }
+.carousel {
+    float: right;
+    max-height: 100%;
+    max-width: 300px;
+}
+.carousel .slide {
+    background-color: transparent;
+}
 .plants {
     width: 50%;
     float: left;
     padding: 20px;
 }  
+.description {
+    font-size:12px;
+}
 .plant-list {
     height: 55%;
     scroll-behavior: smooth;
@@ -33,7 +44,14 @@ body {
 #search-input {
     width: 100%;
 }
-
+.image-display {
+    width: fit-content;
+    height: 200px;
+    overflow-x: scroll;
+}
+.plant-image {
+    height: 200px;
+}
 ul {
     list-style-type: none;
     padding:0;

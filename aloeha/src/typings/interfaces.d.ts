@@ -40,7 +40,7 @@ interface Plant {
     delawareNative: boolean,
     invasive: boolean,
     source: string[],
-    image: string
+    images: string[],
 }
 
 interface User {
