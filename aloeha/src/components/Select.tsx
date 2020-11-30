@@ -1,8 +1,8 @@
-import { findAllByAltText } from "@testing-library/react";
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.24.02 PM.png"
+import { Carousel } from "react-responsive-carousel";
 import './select.css';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ReactHover, { Trigger, Hover } from "react-hover";
 import { usePromiseTracker, trackPromise } from "react-promise-tracker";
 
@@ -139,8 +139,8 @@ interface PlantDisProps {
 }
 const optionsCursorTrueWithMargin = {
     followCursor:true,
-    shiftX:20,
-    shiftY:0
+    shiftX:50,
+    shiftY:-300
 }
 
 const PlantDisplay = (props: PlantDisProps) => {
@@ -160,7 +160,8 @@ export const PlantInfo = (props: {plant: Plant}) => {
     const { plant } = props;
     return (<div className="plant-hover">
         <h3>{plant.latinName}</h3>
-                {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "\n"})}</p>}
+                {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "  "})}</p>}
+                {plant.images && <ImageCarousel images={plant.images} />}
                 {plant.invasive && <span className="plant-badge yellow">invasive </span>}
                 {plant.delawareNative && <span className="plant-badge pink">native</span>}
                 {plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}
@@ -170,6 +171,18 @@ export const PlantInfo = (props: {plant: Plant}) => {
                 {/* {plant.bloomTime && <BloomTime times={plant.bloomTime} />} */}
                 {plant.description && <span> <h5>{plant.description}</h5></span>}
         </div>)
+}
+
+export const ImageCarousel = (props: {images: string[]}) => {
+    return (
+        <Carousel autoPlay infiniteLoop>
+            {props.images.map(img => 
+                <div>
+                    <img src={img} />
+                </div>
+                )}
+        </Carousel>
+    )
 }
 
 export const BloomTime = (props: {times: boolean[]}) => {
