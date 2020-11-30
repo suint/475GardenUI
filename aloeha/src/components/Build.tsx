@@ -66,13 +66,17 @@ function Build(props: any) {
             
                 </div>
 
-        {/* <img src={placeholder} style={{ width: "600px" }} /> */}
-    </div>
-        <div id="design">
-            <h1>Build widget goes here</h1>
-            <img src={placeholder} style={{ width: "600px" }} />
+                {/* <img src={placeholder} style={{ width: "600px" }} /> */}
+            </div>
+            <div id="design">
+                <h1>Build widget goes here</h1>
+                <img src={placeholder} style={{ width: "600px" }} />
+                <Link className="nav-link" to="/preview">
+                    Back
+            </Link>
+            </div>
         </div>
-    </div>
+
     )
 }
 
