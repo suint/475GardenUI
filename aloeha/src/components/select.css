@@ -16,6 +16,9 @@ body {
     float: left;
     padding: 20px;
 }  
+.description {
+    font-size:12px;
+}
 .plant-list {
     height: 55%;
     scroll-behavior: smooth;

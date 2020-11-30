@@ -140,7 +140,7 @@ interface PlantDisProps {
 const optionsCursorTrueWithMargin = {
     followCursor:true,
     shiftX:50,
-    shiftY:-300
+    shiftY:-250
 }
 
 const PlantDisplay = (props: PlantDisProps) => {
@@ -169,7 +169,7 @@ export const PlantInfo = (props: {plant: Plant}) => {
                 {plant.moisture && <span className="plant-badge blue">{plant.moisture}</span>}
                 {plant.soilType && <span className="plant-badge brown">{plant.soilType}</span>}
                 {/* {plant.bloomTime && <BloomTime times={plant.bloomTime} />} */}
-                {plant.description && <span> <h5>{plant.description}</h5></span>}
+                {plant.description && <div className="description"> <p>{plant.description}</p></div>}
         </div>)
 }
 
