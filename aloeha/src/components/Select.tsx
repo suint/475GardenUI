@@ -175,7 +175,8 @@ export const PlantInfo = (props: {plant: Plant}) => {
     return (<div className="plant-hover">
         <h3>{plant.latinName}</h3>
                 {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "  "})}</p>}
-                {plant.images && <ImageCarousel images={plant.images} />}
+                {/* REMOVE PLACEHOLDER IMAGE LATER */}
+                {plant.images ? <ImageCarousel images={plant.images} /> : <img src="https://i.imgur.com/DYxP8xq.jpeg" />}
                 {plant.invasive && <span className="plant-badge yellow">invasive </span>}
                 {plant.delawareNative && <span className="plant-badge pink">native</span>}
                 {plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}

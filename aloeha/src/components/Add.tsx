@@ -2,6 +2,7 @@ import React from "react";
 import Collapsible from "react-collapsible";
 import { Link, withRouter } from "react-router-dom";
 import './add.css'
+import { PlantInfo } from "./Select"
 import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.26.45 PM.png"
 
 type AddProps = {
@@ -40,9 +41,26 @@ class PlantSelect extends React.Component<{plants: Plant[]}, {}> {
     render() {
         return (
             <div>
-                <Collapsible className="plant-category" trigger="Plant" >
-                    {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
-                </Collapsible>
+                <div className="plant-category">
+                    <Collapsible trigger="Plants and Shrubs" >
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                    </Collapsible>
+                </div> 
+                <div className="plant-category">
+                    <Collapsible trigger="Small Trees" >
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                    </Collapsible>
+                </div>
+                <div className="plant-category">
+                    <Collapsible trigger="Medium-Sized Trees" >
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                    </Collapsible>
+                </div>
+                <div className="plant-category">
+                    <Collapsible trigger="Largest Trees" >
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                    </Collapsible>
+                </div>
             </div>
         )
     }
@@ -51,9 +69,13 @@ class PlantSelect extends React.Component<{plants: Plant[]}, {}> {
 
 const PlantDisplay = (props: {plant: Plant}) => {
     return (
-        <Collapsible className="plant-info" trigger={props.plant.latinName}>
-            <img src="https://i.imgur.com/DYxP8xq.jpeg" />
-        </Collapsible>
+        <div className="plant-info">
+            <button>Add plant</button>
+            <Collapsible trigger={props.plant.latinName}>
+                <PlantInfo plant={props.plant} />
+                {/* TODO: straighten out this whole thing with the plant info display... this way it gets cut off :( */}
+            </Collapsible>
+        </div>
     )
 }
 
