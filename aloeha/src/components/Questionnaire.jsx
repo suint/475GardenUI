@@ -227,20 +227,6 @@ class Questionnaire extends Component {
 
         </form>
 
-        <div className="row">
-
-          <div className="col-md-12">
-
-            <Link className="nav-link" to="/select">
-              Back
-            </Link>
-            <Link className="nav-link" to="/design">
-              Next
-            </Link>
-
-          </div>
-
-        </div>
 
       </div>
 

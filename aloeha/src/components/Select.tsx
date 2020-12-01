@@ -102,20 +102,6 @@ render() {
             <div id="selected-plants" className="plants">
                 <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
             </div>
-        <div className="row">
-
-          <div className="col-md-12">
-
-            <Link className="nav-link" to="/">
-              Back
-            </Link>
-            <Link className="nav-link" to="/questionnaire">
-              Next
-            </Link>
-
-          </div>
-
-        </div>
         </div>
         )
     }   

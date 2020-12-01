@@ -90,6 +90,7 @@ export class App extends React.Component<{}, UserState>{
     return (
       <div className="App">
         <Router>
+              <Navbar />
           <Switch>
               <Route path="/" exact render={() => <Start />} />
               <Route path="/select" exact render={() => <Select
@@ -106,7 +107,6 @@ export class App extends React.Component<{}, UserState>{
               <Route path="/preview" exact render={() => <Preview />} />
               <Route path="/build" exact render={() => <Build />} />
           </Switch>
-          <Navbar />
         </Router>
       </div>
     );
