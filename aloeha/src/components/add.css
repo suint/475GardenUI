@@ -1,0 +1,48 @@
+
+#add {
+    margin: auto;
+    width: 80%;
+    height:40em;
+}
+.plants {
+    float: left;
+    padding: 20px;
+    height: inherit;
+}  
+#suggested-plants {
+    width: 60%;
+    background-color:#a1ca28;
+    text-align: left;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+}
+#garden-plants {
+    width: 40%;
+    background-color:white;
+    text-align: left;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+}
+.Collapsible__trigger:hover {
+    font-weight:bold;
+    cursor: pointer;
+}
+.plant-category {
+    background-color: wheat;
+    padding: .5em 1em;
+}
+.plant-info {
+    margin: .3em 0;
+}
+.plant-info > button {
+    display: inline;
+    margin: 0 .5em 0 0;
+}
+.plant-info > .Collapsible {
+    display: inline;
+}
+.Collapsible__contentInner img {
+    width: 90%;
+    padding:1em;
+}
+  
