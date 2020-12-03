@@ -34,14 +34,6 @@ function Design(props: any) {
             </Link>
         </div>
         </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    </div>
-=======
-        </div>
->>>>>>> adds accordian
-=======
->>>>>>> 6cd183c423f89d541232a7997e360c1d5e67298d
     )
 }
 
