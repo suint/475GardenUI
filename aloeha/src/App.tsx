@@ -13,6 +13,7 @@ type UserState = {
   existingPlants: Plant[],
   suggestedPlants: Plant[],
   gardenObjects: GardenObject[],
+  gardenPlants: Plant[],
   currentKey: number
 };
 
@@ -130,7 +131,10 @@ export class App extends React.Component<{}, UserState>{
       },
       existingPlants: [],
       suggestedPlants: [],
+      gardenPlants: [], // TODO: refactor this later to something less confusing 
       gardenObjects: [],
+      //gardenPlants = plants the user has selected in Add page
+      //gardenObjects = all objects in garden as arranged in Build page
       currentKey: 0
     }
     this.handleCheckBox = this.handleCheckBox.bind(this);
