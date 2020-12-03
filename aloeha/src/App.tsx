@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Navbar, Select, Start, Design, Questionnaire, Preview, Build, Add } from "./components";
 import './App.css';
+import _ from "lodash";
 
 //https://jsfiddle.net/vbwe1s44/ example 
 
@@ -10,8 +11,13 @@ import './App.css';
 type UserState = {
   newUser: User,
   existingPlants: Plant[],
+<<<<<<< HEAD
   suggestedPlants: Plant[],
   gardenPlants: Plant[]
+=======
+  gardenObjects: GardenObject[],
+  currentKey: number
+>>>>>>> added garden objects to parent page
 };
 
 const fakePlantList = [
@@ -127,8 +133,13 @@ export class App extends React.Component<{}, UserState>{
         colorsWanted: []
       },
       existingPlants: [],
+<<<<<<< HEAD
       suggestedPlants: [],
       gardenPlants: []
+=======
+      gardenObjects: [],
+      currentKey: 0
+>>>>>>> added garden objects to parent page
     }
     this.handleCheckBox = this.handleCheckBox.bind(this);
     this.handleCBSeasons = this.handleCBSeasons.bind(this);
@@ -139,7 +150,42 @@ export class App extends React.Component<{}, UserState>{
 
   }
 
-// make 2 hnadle inputs : 1 for number and 1 for 
+  addGardenObject(objectName: string, imageSrc: string) {
+    const { currentKey, gardenObjects } = this.state;
+    const newObject: GardenObject = {
+      x: 0,
+      y: 0,
+      image: imageSrc,
+      name: objectName,
+      key: currentKey+1,
+    }
+    this.setState(
+      { 
+        currentKey: currentKey + 1,
+        gardenObjects: [...gardenObjects, newObject]
+      }
+    );
+  }
+
+  moveGardenObject(deltaX: number, deltaY: number, key: number) {
+    const { gardenObjects } = this.state;
+    // const updatedObjects = gardenObjects.map((object) => {
+    //   if(object.key == key) {
+    //     const newObject = object;
+    //     newObject.x += deltaX;
+    //     newObject.y += deltaY;
+    //   } else {
+    //     return object;
+    //   }
+    // });
+    const objKey = gardenObjects.findIndex((element => element.key == key));
+    gardenObjects[objKey].x += deltaX;
+    gardenObjects[objKey].y += deltaY;
+    this.setState({
+      gardenObjects: gardenObjects
+    })
+  }
+
   handleNumInput( value: number, name: string) {
     const { newUser } = this.state
     const updateUser = {...newUser, [name]: value}
@@ -207,7 +253,10 @@ export class App extends React.Component<{}, UserState>{
               <Route path="/add" exact render={() => <Add 
                                                                       plants={fakePlantList}/>} />
               <Route path="/preview" exact render={() => <Preview />} />
-              <Route path="/build" exact render={() => <Build />} />
+              <Route path="/build" exact render={() => <Build 
+                                                                      objectAdded={this.addGardenObject}
+                                                                      objectDragged={this.moveGardenObject} 
+                                                                      gardenObjects={this.state.gardenObjects}/>} />
           </Switch>
         </Router>
       </div>

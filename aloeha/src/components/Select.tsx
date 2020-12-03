@@ -165,8 +165,8 @@ export const PlantInfo = (props: {plant: Plant}) => {
                 {plant.images ? <ImageCarousel images={plant.images} /> : <img src="https://i.imgur.com/DYxP8xq.jpeg" />}
                 {plant.invasive && <span className="plant-badge yellow">invasive </span>}
                 {plant.delawareNative && <span className="plant-badge pink">native</span>}
-                {plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}
-                {plant.canopy > 0 && <span className="plant-badge green">canopy: {plant.canopy}</span>}
+                {plant.light && plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}
+                {plant.canopy && plant.canopy > 0 && <span className="plant-badge green">canopy: {plant.canopy}</span>}
                 {plant.moisture && <span className="plant-badge blue">{plant.moisture}</span>}
                 {plant.soilType && <span className="plant-badge brown">{plant.soilType}</span>}
                 {/* {plant.bloomTime && <BloomTime times={plant.bloomTime} />} */}
