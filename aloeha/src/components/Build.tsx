@@ -8,10 +8,32 @@ import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
+const dummyPlant: Plant = {
+    id: "bkdjgd99304",
+    latinName: "bdglsdfg ieurhskdfl",
+    images: ["https://crouton.net/crouton.png"],
+}
+const dummyPlant2: Plant = {
+    id: "98rujtlk",
+    latinName: "mendkblsdfgpow  ieurh klsdf",
+}
 
-
-function Build(props: any) {
+class Build extends React.Component<any, {gardenObjects: GardenObject[]}> {
     
+    constructor(props: any) {
+        super(props);
+        this.objectAdded = this.objectAdded.bind(this);
+        this.objectDrag = this.objectDrag.bind(this);
+        this.state = {
+            gardenObjects: this.props.gardenObjects,
+        };
+    }
+
+    objectAdded = () => {}
+
+    objectDrag = () => {}
+
+    render() {
         return(
             <div>
             <div id="plantbox">
@@ -27,16 +49,7 @@ function Build(props: any) {
                             </Card.Header>
                             <Accordion.Collapse eventKey="0">
                                 
-                                <Card.Body>
-                                        Hello! I'm the body
-                                     <Draggable defaultPosition={{x: 0, y: 0}} onDrag={console.log} >
-                                            
-                                        <div><img draggable={false} src={cactus} style={{ width: "300px" }} /></div>
-                                    </Draggable>
-                                    <Draggable >
-                                        <p>adheena</p>
-                                    </Draggable>
-                                </Card.Body>
+                                <button onClick={this.objectAdded}>Add a plant</button>
                             </Accordion.Collapse>
                         </Card>
                         <Card>
@@ -63,21 +76,16 @@ function Build(props: any) {
             
                 </div>
                 <div id="selected-plants" className="plants">
-            
+                    {this.state.gardenObjects.map((object) => {
+                        return <img src={object.image} />
+                    })}
                 </div>
 
-                {/* <img src={placeholder} style={{ width: "600px" }} /> */}
-            </div>
-            <div id="design">
-                <h1>Build widget goes here</h1>
-                <img src={placeholder} style={{ width: "600px" }} />
-                <Link className="nav-link" to="/preview">
-                    Back
-            </Link>
             </div>
         </div>
         );
     }
+}
 
 
 export default withRouter(Build);
