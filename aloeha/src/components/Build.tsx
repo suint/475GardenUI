@@ -85,6 +85,7 @@ class Build extends React.Component<any, {gardenObjects: GardenObject[]}> {
         </div>
 
     )
+    }
 }
 
 export default withRouter(Build);

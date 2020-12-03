@@ -23,12 +23,25 @@ function Design(props: any) {
         <div id="design">
             
             <img src={placeholder} style={{ width: "600px" }} />
+            <Link className="nav-link" to="/questionnaire">
+                Back
+            </Link>
+            <Draggable>
+                <div><p>hello there</p></div>
+            </Draggable>
+            <Link className="nav-link" to="/preview">
+                Next
+            </Link>
         </div>
+        </div>
+<<<<<<< HEAD
 <<<<<<< HEAD
     </div>
 =======
         </div>
 >>>>>>> adds accordian
+=======
+>>>>>>> 6cd183c423f89d541232a7997e360c1d5e67298d
     )
 }
 

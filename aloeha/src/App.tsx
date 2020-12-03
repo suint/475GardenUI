@@ -12,12 +12,17 @@ type UserState = {
   newUser: User,
   existingPlants: Plant[],
 <<<<<<< HEAD
+<<<<<<< HEAD
   suggestedPlants: Plant[],
   gardenPlants: Plant[]
 =======
   gardenObjects: GardenObject[],
   currentKey: number
 >>>>>>> added garden objects to parent page
+=======
+  gardenObjects: GardenObject[],
+  currentKey: number
+>>>>>>> 6cd183c423f89d541232a7997e360c1d5e67298d
 };
 
 const fakePlantList = [
@@ -134,12 +139,17 @@ export class App extends React.Component<{}, UserState>{
       },
       existingPlants: [],
 <<<<<<< HEAD
+<<<<<<< HEAD
       suggestedPlants: [],
       gardenPlants: []
 =======
       gardenObjects: [],
       currentKey: 0
 >>>>>>> added garden objects to parent page
+=======
+      gardenObjects: [],
+      currentKey: 0
+>>>>>>> 6cd183c423f89d541232a7997e360c1d5e67298d
     }
     this.handleCheckBox = this.handleCheckBox.bind(this);
     this.handleCBSeasons = this.handleCBSeasons.bind(this);
