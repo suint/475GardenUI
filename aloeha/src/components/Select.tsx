@@ -1,48 +1,36 @@
-import { findAllByAltText } from "@testing-library/react";
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.24.02 PM.png"
+import { Carousel } from "react-responsive-carousel";
 import './select.css';
-import Hover from "react-hover";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import ReactHover, { Trigger, Hover } from "react-hover";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker";
 
-// const data: Array<PlantProps> = [
-//     {name: "Daisy", id: 1},
-//     {name: "Rose", id: 2},
-//     {name: "Sunflower", id: 3},
-//     {name: "Dandelion", id: 4},
-//     {name: "Iris", id: 5},
-//     {name: "Tulip", id: 6},
-//     {name: "Hydrangea", id: 7},
-// ]
-
-type PlantProps = {
-    name: string,
-    id: number
-};
+// const Select = (props: boxProps) => {
+//     return (
+//         <PlantBox onPlantSelect={props.onPlantSelect}  />
+//         )
+//     }
 
 type boxState = {
-    plants: Array<Plant>,
-    searchPlants: Array<Plant>,
-    selectedPlants: Array<Plant>,
-  };
-
-const Select = () => {
-    return (
-        <PlantBox />
-    )
-}
-
-
+    plants: Plant[],
+    searchPlants: Plant[],
+    selectedPlants: Plant[],
+};
+type boxProps = {
+    onPlantSelect: (e: Plant[]) => void,
+    existingPlants: Plant[]
+};
   
 // at some later point, we will need to lift the state here (and all other components) into app.tsx
-class PlantBox extends React.Component<{}, boxState> {
-    constructor(props: any) {
+class Select extends React.Component<any, boxState> {
+    constructor(props: any) { // TODO: fix "any" props
         super(props);
         this.handleEvent = this.handleEvent.bind(this);
         this.state = {
-        plants: [],
-        searchPlants: [],
-        selectedPlants: [],
+            plants: [],
+            searchPlants: [],
+            selectedPlants: [... props.existingPlants],
         };
     }
 
@@ -50,29 +38,46 @@ class PlantBox extends React.Component<{}, boxState> {
         const { searchPlants, selectedPlants } = this.state;
         // checks if clicked plant is in search plants
         const isInSearchResults = searchPlants.some(result => result.id === clickedPlant.id);
+        const newSearchPlants = isInSearchResults ? searchPlants.filter(i => i.id  !== clickedPlant.id) : [...searchPlants, clickedPlant];
+        const newSelectedPlants = isInSearchResults ? [...selectedPlants, clickedPlant] : selectedPlants.filter(i => i.id !== clickedPlant.id);
 
         this.setState({
             // check which list clicked plant starts in and remove if it's in that one, add if it's not
-            searchPlants: isInSearchResults ? searchPlants.filter(i => i.id  !== clickedPlant.id) : [...searchPlants, clickedPlant],
-            selectedPlants: isInSearchResults ? [...selectedPlants, clickedPlant] : selectedPlants.filter(i => i.id !== clickedPlant.id)
-        });
+            searchPlants: newSearchPlants,
+            selectedPlants: newSelectedPlants
+        })
+        this.props.onPlantSelect(newSelectedPlants);
 }
     handleSearch = () => {
         let input = document.getElementById("search-input") as HTMLInputElement;
         if (input.value) {
             let searchText = input.value;
             // TODO: search should search latin name + common names
-            this.setState({searchPlants: this.state.plants.filter((plant) => plant.latinName.toLowerCase().includes(searchText.toLowerCase()))});
+            if (searchText.length >= 3) {
+                const newSearchPlants = this.state.plants.filter((plant) => this.plantMatch(plant, searchText) );
+                this.setState({searchPlants: newSearchPlants});
+            }
         } else {
             this.setState({searchPlants: this.state.plants});
         }
+    }
+
+    plantMatch = (plant: Plant, query: string) => {
+        var plantText = plant.latinName;
+        if (plant.commonNames) {
+            plantText = plantText + plant.commonNames.join(" ");
+        }
+        if (plantText.toLowerCase().search(query.toLowerCase()) > 0) {
+            return true;
+        }
+        return false;
     }
 
     componentDidMount() {
         //when backend is fixed switch to this
         const url = "http://localhost:8080/plants/list/";
         
-        fetch(url)
+        trackPromise(fetch(url)
         .then(result => result.json())
         .then(
             (result) => {
@@ -81,66 +86,113 @@ class PlantBox extends React.Component<{}, boxState> {
             },
             (error) => {
             }
-        )
+        ));
     }
     
 render() {
     return (
         <div id="plantbox">
             <h1>Plant Select</h1>
-                <div id="search-plants" className="plants">
-                    <p>Search for plants which already grow in your garden.</p>
-                    <p>Once you have found your plant, click on its name to add it to your list. To remove a plant from your list, simply click it again.</p>
-                    <Search onSearch={this.handleSearch} />
-                    <PlantList handleClick={this.handleEvent} plants={this.state.searchPlants} />
-                </div>
+            <div id="search-plants" className="plants">
+                <p>Search for plants which already grow in your garden.</p>
+                <p>Once you have found your plant, click on its name to add it to your list. To remove a plant from your list, simply click it again.</p>
+                <Search onSearch={this.handleSearch} />
+                <PlantList handleClick={this.handleEvent} plants={this.state.searchPlants} />
+            </div>
             <div id="selected-plants" className="plants">
                 <PlantList handleClick={this.handleEvent} plants={this.state.selectedPlants} />
             </div>
-
-            {/* <img src={placeholder} style={{ width: "600px" }} /> */}
         </div>
         )
     }   
 }
 
 const PlantList = (props: {plants: Array<Plant>, handleClick(plant: Plant): any}) => {
-    return (
-    <ul className="plant-list">
-    {props.plants.map((item) => 
-        <PlantDisplay plant={item} handleClick={props.handleClick} />
-    )}
-    </ul>)
+    const { promiseInProgress } = usePromiseTracker();
+    if (promiseInProgress) {
+        return <p>Plant information loading...</p>
+    } else {
+        return (
+        <ul className="plant-list">
+        {props.plants.map((item) => 
+            <PlantDisplay plant={item} handleClick={props.handleClick} key={item.id} />
+        )}
+        </ul>)
+    }
 }
 
 type SearchProps = {
-    onSearch: () => void,
-}
-class Search extends React.Component<SearchProps, {}> {
-    constructor(props: any) {
-        super(props);
-        this.state = {};
-    }
+    onSearch: () => void
+};
 
-    render() {
-        return (
-            <div id="search">
-                <label>Begin typing to search</label><input onChange={this.props.onSearch} id="search-input" type="text"></input>
-            </div>
-        )
-    }
+const Search = (props: SearchProps) => {
+    return (
+        <div id="search">
+            <label>Type at least three letters to search</label><input onChange={props.onSearch} id="search-input" type="text"></input>
+        </div>
+    )
 }
 
 interface PlantDisProps {
     plant: Plant,
     handleClick(plant: Plant): any, 
 }
-class PlantDisplay extends React.Component<PlantDisProps, {}> {
-    render(){
-        const { handleClick, plant } = this.props;
-        return <li onClick={() => handleClick(plant)}> {plant.latinName} </li>;
-    }
+const optionsCursorTrueWithMargin = {
+    followCursor:true,
+    shiftX:50,
+    shiftY:-250
+}
+
+const PlantDisplay = (props: PlantDisProps) => {
+    const { handleClick, plant } = props;
+    return <ReactHover options={optionsCursorTrueWithMargin}>
+        <Trigger>
+            <li onClick={() => handleClick(plant)}> {plant.latinName} </li>
+        </Trigger>
+        <Hover>
+                <PlantInfo plant={plant} />
+        </Hover>
+    </ReactHover>
 }
   
+// TODO: add bloom time
+export const PlantInfo = (props: {plant: Plant}) => {
+    const { plant } = props;
+    return (<div className="plant-hover">
+        <h3>{plant.latinName}</h3>
+                {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "  "})}</p>}
+                {/* REMOVE PLACEHOLDER IMAGE LATER */}
+                {plant.images ? <ImageCarousel images={plant.images} /> : <img src="https://i.imgur.com/DYxP8xq.jpeg" />}
+                {plant.invasive && <span className="plant-badge yellow">invasive </span>}
+                {plant.delawareNative && <span className="plant-badge pink">native</span>}
+                {plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}
+                {plant.canopy > 0 && <span className="plant-badge green">canopy: {plant.canopy}</span>}
+                {plant.moisture && <span className="plant-badge blue">{plant.moisture}</span>}
+                {plant.soilType && <span className="plant-badge brown">{plant.soilType}</span>}
+                {/* {plant.bloomTime && <BloomTime times={plant.bloomTime} />} */}
+                {plant.description && <div className="description"> <p>{plant.description}</p></div>}
+        </div>)
+}
+
+export const ImageCarousel = (props: {images: string[]}) => {
+    return (
+        <Carousel autoPlay infiniteLoop>
+            {props.images.map(img => 
+                <div>
+                    <img src={img} />
+                </div>
+                )}
+        </Carousel>
+    )
+}
+
+export const BloomTime = (props: {times: boolean[]}) => {
+    const { times } = props;
+    return (
+        <div className="bloom-times">
+            {times.map((month: boolean) => month ? <span className="bloom-yes" /> : <span className="bloom-no" />)}
+        </div>
+    )
+}
 
 export default withRouter(Select);

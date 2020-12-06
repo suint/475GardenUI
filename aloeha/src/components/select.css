@@ -6,11 +6,22 @@ body {
     width: 80%;
     height:40em;
 }
+.carousel {
+    float: right;
+    max-height: 100%;
+    max-width: 300px;
+}
+.carousel .slide {
+    background-color: transparent;
+}
 .plants {
     width: 50%;
     float: left;
     padding: 20px;
 }  
+.description {
+    font-size:12px;
+}
 .plant-list {
     height: 55%;
     scroll-behavior: smooth;
@@ -30,10 +41,17 @@ body {
 #search {
     margin: 1em 0;
 }
-input {
+#search-input {
     width: 100%;
 }
-
+.image-display {
+    width: fit-content;
+    height: 200px;
+    overflow-x: scroll;
+}
+.plant-image {
+    height: 200px;
+}
 ul {
     list-style-type: none;
     padding:0;
@@ -41,4 +59,40 @@ ul {
 li:hover {
     font-weight:bold;
     cursor: pointer;
+}
+.plant-hover {
+    background-color: mintcream;
+    padding: .5rem 2rem;
+    width:700px;
+    white-space: pre-wrap;
+}
+.plant-badge {
+    padding: .7rem;
+    margin: 0 1em 0 0;
+    font-size: 10px;
+    border-radius: 8px;
+    box-shadow: inset;
+}
+.white {
+    background-color: whitesmoke;
+}
+.green {
+    background-color: lightseagreen;
+}
+.blue {
+    background-color: cornflowerblue;
+}
+.pink {
+    background-color: papayawhip;
+}
+.yellow {
+    background-color: goldenrod;
+}
+.brown  {
+    background-color: peru;
+}
+.bloom-yes {
+    width: 40px;
+    height: 10px;
+    background-color: black;
 }
