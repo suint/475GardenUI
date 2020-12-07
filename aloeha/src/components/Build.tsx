@@ -20,6 +20,8 @@ const dummyPlant2: Plant = {
     images: ["https://crouton.net/crouton.png"]
 }
 
+const ObjectList = ["Flamingo", "Bench", "Birdbath", "Fence", "Forest", "Gnome", "Path", "Patio", "Playground", "Pool", "Road", "Rock", "TextLabel"];
+
 class Build extends React.Component<any, {}> {
     
     constructor(props: any) {
@@ -134,6 +136,7 @@ class DraggableObject extends React.Component<any, DraggableState> {
                 <div className="garden-obj">
                     <img src={this.state.gardenObject.image}></img>
                     <p>{this.state.gardenObject.x}, {this.state.gardenObject.y}</p>
+                    <p>{this.state.gardenObject.name}</p>
                 </div>
             </Draggable>
         )
