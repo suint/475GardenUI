@@ -1,12 +1,10 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.27.21 PM.png"
-import cactus from "./img/reference pictures/cactus.jpg"
-import Draggable from 'react-draggable';
+import Draggable, {DraggableBounds} from 'react-draggable';
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
-import { ObjDisplay } from ".";
+import _ from "lodash";
 
 const dummyPlant: GardenObject = {
     key: 0,
@@ -19,41 +17,29 @@ const dummyPlant: GardenObject = {
 const dummyPlant2: Plant = {
     id: "98rujtlk",
     latinName: "mendkblsdfgpow  ieurh klsdf",
+    images: ["https://crouton.net/crouton.png"]
 }
 
-class Build extends React.Component<any, {gardenObjects: GardenObject[]}> {
+class Build extends React.Component<any, {}> {
     
     constructor(props: any) {
         super(props);
         this.objectAdded = this.objectAdded.bind(this);
         this.objectDrag = this.objectDrag.bind(this);
-        this.state = {
-            gardenObjects: this.props.gardenObjects,
-        };
     }
 
     objectAdded = () => {
-        this.state.gardenObjects.push(dummyPlant)
-        for(let i = 0; i < this.state.gardenObjects.length; i++){
-            console.log(this.state.gardenObjects)
-            var DOM_img = document.createElement("img");
-            DOM_img.src = "https://crouton.net/crouton.png"; 
-            DOM_img.className = "draggable"
-            console.log(DOM_img.attributes)
-            document.getElementById("selected-plants")?.appendChild(DOM_img)
-
-            
-        } 
+        this.props.addGardenObject(dummyPlant2.latinName, "https://crouton.net/crouton.png");
+        this.forceUpdate();
     }
 
     objectDrag = () => {}
 
     render() {
         return(
-            <div>
-            <div id="plantbox">
+            <div id="gardenpage">
                 <h1>Build widget goes here</h1>
-                <div id="search-plants" className="plants">
+                <div id="garden-select">
                     <p>Drag and drop your plants and objects from the drop downs on the left to build your garden. Click next to see your garden in a different season, age, and view, or you can save your garden project here.</p>
                     <Accordion>
                         <Card>
@@ -90,18 +76,67 @@ class Build extends React.Component<any, {gardenObjects: GardenObject[]}> {
                     </Accordion>
             
                 </div>
-                <div id="selected-plants" className="plants">
-                    hi
-                    {this.state.gardenObjects.map((object) => {
-                        console.log("hi")
-                        return <ObjDisplay gardenObject={object}/>
+                <div id="garden-box" style={{height: '600px', width: '500px', position: 'relative'}}>
+                        {this.props.gardenObjects.map((object: GardenObject) => {
+                        return <DraggableObject onDrag={this.props.moveGardenObject} gardenObject={object} key={object.key}/>
                     })}
                 </div>
-
             </div>
-        </div>
 
     )
+    }
+}
+
+
+type DraggableState = {
+    activeDrags: number,
+    positionX: number,
+    positionY: number,
+    gardenObject: GardenObject
+}
+class DraggableObject extends React.Component<any, DraggableState> {
+    
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            activeDrags: 0,
+            positionX: this.props.gardenObject.x, 
+            positionY: this.props.gardenObject.y,
+            gardenObject: this.props.gardenObject
+        }
+        
+        this.handleDrag = this.handleDrag.bind(this);
+        this.onStart = this.onStart.bind(this);
+        this.onStop = this.onStop.bind(this);
+    }
+
+
+    handleDrag = (e: any, ui: any) => {
+        const {positionX, positionY} = this.state;
+        e.preventDefault();
+        this.props.onDrag(positionX + ui.deltaX, positionY + ui.deltaY, this.state.gardenObject.key);
+    };
+
+    onStart = () => {
+        this.setState({activeDrags: this.state.activeDrags + 1});
+    };
+
+    onStop = () => {
+        this.setState({activeDrags: this.state.activeDrags - 1});
+    };
+
+    render() {
+        const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
+        let bounds: DraggableBounds = {top: 0, bottom: 600, left: 0, right: 500}; // TODO: this allows image to be dragged out of bounds (since anchor point is at upper left corner)
+            // also it's not very responsive :(
+        return(
+            <Draggable onDrag={this.handleDrag} bounds={bounds} {...dragHandlers}>
+                <div className="garden-obj">
+                    <img src={this.state.gardenObject.image}></img>
+                    <p>{this.state.gardenObject.x}, {this.state.gardenObject.y}</p>
+                </div>
+            </Draggable>
+        )
     }
 }
 

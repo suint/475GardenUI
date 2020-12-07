@@ -135,8 +135,10 @@ export class App extends React.Component<{}, UserState>{
       gardenObjects: [],
       //gardenPlants = plants the user has selected in Add page
       //gardenObjects = all objects in garden as arranged in Build page
-      currentKey: 0
+      currentKey: 1
     }
+    this.addGardenObject = this.addGardenObject.bind(this);
+    this.moveGardenObject = this.moveGardenObject.bind(this);
     this.handleCheckBox = this.handleCheckBox.bind(this);
     this.handleCBSeasons = this.handleCBSeasons.bind(this);
     this.handleCBColors = this.handleCBColors.bind(this);
@@ -250,8 +252,8 @@ export class App extends React.Component<{}, UserState>{
                                                                       plants={fakePlantList}/>} />
               <Route path="/preview" exact render={() => <Preview />} />
               <Route path="/build" exact render={() => <Build 
-                                                                      objectAdded={this.addGardenObject}
-                                                                      objectDragged={this.moveGardenObject} 
+                                                                      addGardenObject={this.addGardenObject}
+                                                                      moveGardenObject={this.moveGardenObject} 
                                                                       gardenObjects={this.state.gardenObjects}/>} />
           </Switch>
         </Router>
