@@ -3,16 +3,19 @@ import { Link, withRouter } from "react-router-dom";
 import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.27.21 PM.png"
 import cactus from "./img/reference pictures/cactus.jpg"
 import Draggable from 'react-draggable';
-// import Draggable from './Draggable'
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import { ObjDisplay } from ".";
 
-const dummyPlant: Plant = {
-    id: "bkdjgd99304",
-    latinName: "bdglsdfg ieurhskdfl",
-    images: ["https://crouton.net/crouton.png"],
+const dummyPlant: GardenObject = {
+    key: 0,
+    name: "bdglsdfg ieurhskdfl",
+    image: "https://crouton.net/crouton.png",
+    x: 150,
+    y: 150
 }
+
 const dummyPlant2: Plant = {
     id: "98rujtlk",
     latinName: "mendkblsdfgpow  ieurh klsdf",
@@ -29,7 +32,19 @@ class Build extends React.Component<any, {gardenObjects: GardenObject[]}> {
         };
     }
 
-    objectAdded = () => {}
+    objectAdded = () => {
+        this.state.gardenObjects.push(dummyPlant)
+        for(let i = 0; i < this.state.gardenObjects.length; i++){
+            console.log(this.state.gardenObjects)
+            var DOM_img = document.createElement("img");
+            DOM_img.src = "https://crouton.net/crouton.png"; 
+            DOM_img.className = "draggable"
+            console.log(DOM_img.attributes)
+            document.getElementById("selected-plants")?.appendChild(DOM_img)
+
+            
+        } 
+    }
 
     objectDrag = () => {}
 
@@ -76,8 +91,10 @@ class Build extends React.Component<any, {gardenObjects: GardenObject[]}> {
             
                 </div>
                 <div id="selected-plants" className="plants">
+                    hi
                     {this.state.gardenObjects.map((object) => {
-                        return <img src={object.image} />
+                        console.log("hi")
+                        return <ObjDisplay gardenObject={object}/>
                     })}
                 </div>
 
