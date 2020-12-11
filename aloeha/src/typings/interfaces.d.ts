@@ -44,7 +44,6 @@ interface Plant {
 }
 
 interface User {
-
     name: string,
     length: number,
     width: number,

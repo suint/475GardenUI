@@ -10,7 +10,7 @@ import './App.css';
 type UserState = {
   newUser: User,
   existingPlants: Plant[],
-  suggestedPlants: Plant[],
+  recommendedPlants: Plant[],
   gardenPlants: Plant[]
 };
 
@@ -127,7 +127,7 @@ export class App extends React.Component<{}, UserState>{
         colorsWanted: []
       },
       existingPlants: [],
-      suggestedPlants: [],
+      recommendedPlants: [],
       gardenPlants: []
     }
     this.handleCheckBox = this.handleCheckBox.bind(this);
@@ -139,7 +139,6 @@ export class App extends React.Component<{}, UserState>{
 
   }
 
-// make 2 hnadle inputs : 1 for number and 1 for 
   handleNumInput( value: number, name: string) {
     const { newUser } = this.state
     const updateUser = {...newUser, [name]: value}
@@ -185,6 +184,11 @@ export class App extends React.Component<{}, UserState>{
     console.log(this.state);
   }
 
+  handleRecommendedPlantSelect(e: Plant[]) {
+    this.setState({recommendedPlants: e});
+    console.log(this.state);
+  }
+
   render() {
 
     return (
@@ -205,7 +209,9 @@ export class App extends React.Component<{}, UserState>{
                                                                       onCBSeasonsChange={this.handleCBSeasons}
                                                                       onCBColorsChange={this.handleCBColors} />} />
               <Route path="/add" exact render={() => <Add 
-                                                                      plants={fakePlantList}/>} />
+                                                                      user={this.state.newUser}
+                                                                      plants={fakePlantList}
+                                                                      onPlantSelect={this.handleRecommendedPlantSelect}/>} />
               <Route path="/preview" exact render={() => <Preview />} />
               <Route path="/build" exact render={() => <Build />} />
           </Switch>

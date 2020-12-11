@@ -94,5 +94,10 @@ li:hover {
 .bloom-yes {
     width: 40px;
     height: 10px;
-    background-color: black;
+    background-color: olivedrab;
+}
+.bloom-no {
+    width: 40px;
+    height: 10px;
+    background-color: tomato;
 }

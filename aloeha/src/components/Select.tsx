@@ -74,7 +74,6 @@ class Select extends React.Component<any, boxState> {
     }
 
     componentDidMount() {
-        //when backend is fixed switch to this
         const url = "http://localhost:8080/plants/list/";
         
         trackPromise(fetch(url)
