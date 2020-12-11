@@ -100,4 +100,31 @@ li:hover {
     width: 40px;
     height: 10px;
     background-color: tomato;
+    background-color: black;
+}
+
+#garden-box {
+    text-align: left;
+    color: black;
+    background-color:#ffffff;
+    float:right;
+}
+#garden-select {
+    text-align: left;
+    height: 600px;
+    background-color: #a1ca28;
+    float: left;
+    padding: 20px;
+    width:300px;
+}
+#gardenpage {
+    height: 600px;
+    width: 800px;
+    position: relative;
+    overflow: auto;
+    padding: 0;
+    margin: 0 auto;
+}
+.garden-obj {
+    width: fit-content;
 }

@@ -30,17 +30,17 @@
 interface Plant {
     id: string,
     latinName: string,
-    commonNames: string[],
-    description: string,
-    bloomTime: boolean[],
-    light: number,
-    moisture: string,
-    soilType: string,
-    canopy: number,
-    delawareNative: boolean,
-    invasive: boolean,
-    source: string[],
-    images: string[],
+    commonNames?: string[],
+    description?: string,
+    bloomTime?: boolean[],
+    light?: number,
+    moisture?: string,
+    soilType?: string,
+    canopy?: number,
+    delawareNative?: boolean,
+    invasive?: boolean,
+    source?: string[],
+    images?: string[],
 }
 
 interface User {
@@ -53,4 +53,12 @@ interface User {
     sunlight: string,
     seasonsWanted: string[],
     colorsWanted: string[]
+}
+
+interface GardenObject {
+    x: number,
+    y: number,
+    image: string,
+    name: string,
+    key: number
 }

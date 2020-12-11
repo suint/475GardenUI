@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Navbar, Select, Start, Design, Questionnaire, Preview, Build, Add } from "./components";
 import './App.css';
+import _ from "lodash";
 
 //https://jsfiddle.net/vbwe1s44/ example 
 
@@ -11,7 +12,10 @@ type UserState = {
   newUser: User,
   existingPlants: Plant[],
   recommendedPlants: Plant[],
-  gardenPlants: Plant[]
+  suggestedPlants: Plant[],
+  gardenObjects: GardenObject[],
+  gardenPlants: Plant[],
+  currentKey: number
 };
 
 const fakePlantList = [
@@ -128,8 +132,15 @@ export class App extends React.Component<{}, UserState>{
       },
       existingPlants: [],
       recommendedPlants: [],
-      gardenPlants: []
+      suggestedPlants: [],
+      gardenPlants: [], // TODO: refactor this later to something less confusing 
+      gardenObjects: [],
+      //gardenPlants = plants the user has selected in Add page
+      //gardenObjects = all objects in garden as arranged in Build page
+      currentKey: 1
     }
+    this.addGardenObject = this.addGardenObject.bind(this);
+    this.moveGardenObject = this.moveGardenObject.bind(this);
     this.handleCheckBox = this.handleCheckBox.bind(this);
     this.handleCBSeasons = this.handleCBSeasons.bind(this);
     this.handleCBColors = this.handleCBColors.bind(this);
@@ -137,6 +148,42 @@ export class App extends React.Component<{}, UserState>{
     this.handleStringInput = this.handleStringInput.bind(this);
     this.handleExistingPlantSelect = this.handleExistingPlantSelect.bind(this);
 
+  }
+
+  addGardenObject(objectName: string, imageSrc: string) {
+    const { currentKey, gardenObjects } = this.state;
+    const newObject: GardenObject = {
+      x: 0,
+      y: 0,
+      image: imageSrc,
+      name: objectName,
+      key: currentKey+1,
+    }
+    this.setState(
+      { 
+        currentKey: currentKey + 1,
+        gardenObjects: [...gardenObjects, newObject]
+      }
+    );
+  }
+
+  moveGardenObject(deltaX: number, deltaY: number, key: number) {
+    const { gardenObjects } = this.state;
+    // const updatedObjects = gardenObjects.map((object) => {
+    //   if(object.key == key) {
+    //     const newObject = object;
+    //     newObject.x += deltaX;
+    //     newObject.y += deltaY;
+    //   } else {
+    //     return object;
+    //   }
+    // });
+    const objKey = gardenObjects.findIndex((element => element.key == key));
+    gardenObjects[objKey].x += deltaX;
+    gardenObjects[objKey].y += deltaY;
+    this.setState({
+      gardenObjects: gardenObjects
+    })
   }
 
   handleNumInput( value: number, name: string) {
@@ -213,7 +260,10 @@ export class App extends React.Component<{}, UserState>{
                                                                       plants={fakePlantList}
                                                                       onPlantSelect={this.handleRecommendedPlantSelect}/>} />
               <Route path="/preview" exact render={() => <Preview />} />
-              <Route path="/build" exact render={() => <Build />} />
+              <Route path="/build" exact render={() => <Build 
+                                                                      addGardenObject={this.addGardenObject}
+                                                                      moveGardenObject={this.moveGardenObject} 
+                                                                      gardenObjects={this.state.gardenObjects}/>} />
           </Switch>
         </Router>
       </div>
