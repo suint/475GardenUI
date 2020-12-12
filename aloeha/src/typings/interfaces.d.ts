@@ -36,7 +36,7 @@ interface Plant {
     light?: number,
     moisture?: string,
     soilType?: string,
-    canopy?: number,
+    canopy?: string,
     delawareNative?: boolean,
     invasive?: boolean,
     source?: string[],
