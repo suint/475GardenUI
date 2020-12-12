@@ -6,7 +6,9 @@ import { PlantInfo } from "./Select";
 import { trackPromise } from "react-promise-tracker";
 
 type AddProps = {
-    plants: Plant[]
+    user: User,
+    gardenObjects: GardenObject,
+    handleRecommendedPlantSelect: () => void
 }
 
 type AddState = {
@@ -15,7 +17,7 @@ type AddState = {
     user: User
 }
 
-
+let nativePlants: Plant[] = [];
 class Add extends React.Component <any, AddState> {
     constructor(props: any) {
         super(props);
@@ -24,18 +26,13 @@ class Add extends React.Component <any, AddState> {
             selectedPlants: [],
             user: this.props.user
         }
-        this.recommendPlants = this.recommendPlants.bind(this);
+        this.checkPlant = this.checkPlant.bind(this);
     }
 
     componentDidMount = () => {
-        // filters native plants based on questionnaire answers
-        const { moisture, sunlight, soil, seasonsWanted, colorsWanted } = this.state.user;
-        
+        // retrieve list of native plants from database
         const url = "http://localhost:8080/plants/list/";
         
-        let nativePlants: Plant[] = [];
-
-        // retrieve list of native plants from database
         trackPromise(fetch(url)
         .then(result => result.json())
         .then(
@@ -45,29 +42,109 @@ class Add extends React.Component <any, AddState> {
             },
             (error) => {
             }
-        ));
-        
-        for (const plant of nativePlants) {
-            let fits = false;
+            ));
             
-        }
-
-    }
-
-    // pass in name of param and user object and return corresponding numerical value 
-    getUserParams = (param: string, user: User) => {
-        switch (param){
-            case "sunlight":
-                break;
-            case "moisture":
-                break;
-            case "soil":
-                break;
-        }
-    }
-
-    recommendPlants = (user: User) => {
+        // filters native plants based on questionnaire answers
+        let recPlants = nativePlants.filter((plant: Plant) => {return this.checkPlant(plant)});
         
+        this.setState({recommendedPlants: recPlants});
+
+    }
+
+    // returns true if a sunlight level name is equivalent to a percentage
+    checkLight = (sunStr: string, percentage: number) => {
+        let equal = false;
+        if (sunStr == "Full-sun" && percentage >= 0.9 && percentage <= 1.0) {
+                equal = true;
+        }
+        if (sunStr == "Partial-shade" && percentage > 0.5 && percentage < 0.9) {
+                equal = true;
+        }
+        if (sunStr == "Partial-sun" && percentage >= 0.3 && percentage <= 0.5) {
+                equal = true;
+        }
+        if (sunStr == "Full-shade" && percentage >= 0 && percentage < 0.3) {
+                equal = true;
+        }
+        // percentage == -1 means plant has no light value
+        if (sunStr == "My plot has different levels" || percentage == -1) {
+            equal = true;
+        }
+        return equal;
+    }
+
+    // returns true if bloom times overlap with one of the desired seasons
+    checkSeasons = (bloomTime: boolean[], seasonsWanted: String[]) => {
+        if (seasonsWanted.includes("Year Round")) {
+            return true;
+        }
+        // winter is dec, jan, feb; spring is mar, apr, may; summer is june, july, aug; 
+        // fall is sept, oct, nov (meterological seasons)
+        for (var a=1; a<13; a++) {
+            if (a == 1 || a == 2 || a == 12) {
+                if (seasonsWanted.includes("Winter")) {
+                    return true;
+                }
+            } else if (a == 3 || a == 4 || a == 5) {
+                if (seasonsWanted.includes("Spring")) {
+                    return true;
+                }
+            } else if (a == 6 || a == 7 || a == 8) {
+                if (seasonsWanted.includes("Summer")) {
+                    return true;
+                }
+            } else if (a == 9 || a == 10 || a == 11) {
+                if (seasonsWanted.includes("Fall")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // return true if plant flower color is one of the colors wanted
+    checkColors = (plant: Plant, colors: string[]) => {
+        const { description } = plant;
+        if (description) {
+            var regex = /Flower Color: ([a-zA-Z]+)/g;
+            let bloomColor = regex.exec(description);
+            if (bloomColor) {
+                for (const color of colors) {
+                    // using includes instead of equals since some colors are like "greenish" or "light red"
+                    // which should match "green" or "red"
+                    if (bloomColor[0].toLowerCase().includes(color.toLowerCase())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+        return true; // if no bloom color is mentioned, it probably doesn't bloom, so just return true
+    }
+
+    // check plant matches user garden conditions and desired blooming seasons/colors
+    checkPlant = (plant: Plant) => {
+        const {moisture, sunlight, soil, colorsWanted, seasonsWanted} = this.state.user;
+        const plantLight = plant.light ? plant.light : -1;
+
+        // check plant growing conditions fit the garden (moisture level, sunlight levels, soil type)
+        if (plant.moisture == moisture.toUpperCase() || !plant.moisture || !moisture || plant.moisture == "ANY") {
+            if (this.checkLight(sunlight, plantLight)) {
+                if (plant.soilType == soil.toUpperCase() || !soil || !plant.soilType || plant.soilType == "ANY" || soil == "Any Soil") {
+                    //check it blooms during one of the desired seasons
+                    if (!plant.bloomTime || !seasonsWanted || seasonsWanted.includes("Year Round") || this.checkSeasons(plant.bloomTime, seasonsWanted)){
+                        // avoid duplicates with selected plants 
+                        if (!this.state.selectedPlants.some((selPlant: Plant) => {return selPlant.id == plant.id})) {
+                            // blooms are one of the desired colors 
+                            if (!colorsWanted || this.checkColors(plant, colorsWanted)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     render() {
@@ -76,12 +153,12 @@ class Add extends React.Component <any, AddState> {
                 <h1>Add plants</h1>
                 <div id="suggested-plants" className="plants">
                     <p>
-                        Please select plants you'd like to have in your garden from the recommendations below. 
+                        Please select plants you would like to have in your garden from the recommendations below. 
                         Selecting plants from each category will give you the best chance for a thriving garden 
                         because each category of plants requires a different amount of sunlight. 
                         <br /> Once you have selected your plants, click "Next" to start building your garden!
                     </p>
-                    <PlantSelect plants={this.props.plants} />
+                    <PlantSelect plants={this.state.recommendedPlants} />
                 </div>
                 <div id="garden-plants" className="plants">
 
