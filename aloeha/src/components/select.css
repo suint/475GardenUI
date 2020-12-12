@@ -122,3 +122,9 @@ li:hover {
 .garden-obj {
     width: fit-content;
 }
+#layout {
+    background-color: white;
+    height: 575px;
+    width: 575px;
+    margin: 25px auto;
+}
