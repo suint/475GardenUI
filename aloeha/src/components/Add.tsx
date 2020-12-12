@@ -172,27 +172,33 @@ class PlantSelect extends React.Component<{plants: Plant[]}, {}> {
     constructor(props: {plants: Plant[]}) { 
         super(props);
     }
+
     render() {
+        const {plants} = this.props;
+        let shrubs = plants.filter((plant: Plant) => { return plant.canopy == "FLOOR" });
+        let smallTrees = plants.filter((plant: Plant) => { return plant.canopy == "UNDERSTORY" });
+        let medTrees = plants.filter((plant: Plant) => { return plant.canopy == "CANOPY" });
+        let lgstTrees = plants.filter((plant: Plant) => { return plant.canopy == "EMERGENT" });
         return (
             <div>
                 <div className="plant-category">
                     <Collapsible trigger="Plants and Shrubs" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {shrubs.map((obj) => {return <PlantDisplay plant={obj} />})}
                     </Collapsible>
                 </div> 
                 <div className="plant-category">
                     <Collapsible trigger="Small Trees" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {smallTrees.map((obj) => {return <PlantDisplay plant={obj} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
                     <Collapsible trigger="Medium-Sized Trees" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {medTrees.map((obj) => {return <PlantDisplay plant={obj} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
                     <Collapsible trigger="Largest Trees" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {lgstTrees.map((obj) => {return <PlantDisplay plant={obj} />})}
                     </Collapsible>
                 </div>
             </div>
