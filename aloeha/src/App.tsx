@@ -113,6 +113,23 @@ const fakePlantList = [
  }
 ]
 
+const fakeObjectList = [
+  {
+    key: 0,
+    name: "bdglsdfg ieurhskdfl",
+    image: "https://crouton.net/crouton.png",
+    x: 150,
+    y: 150
+  },
+  {
+    key: 2,
+    name: "dirghdnlf sdnms,fs",
+    image: "https://crouton.net/crouton.png",
+    x: 20,
+    y: 44
+  }
+]
+
 export class App extends React.Component<{}, UserState>{
   constructor(props: any) {
     super(props);
@@ -259,7 +276,10 @@ export class App extends React.Component<{}, UserState>{
                                                                       existingPlants={this.state.existingPlants}
                                                                       recommendedPlants={this.state.recommendedPlants}
                                                                       onPlantSelect={this.handleRecommendedPlantSelect}/>} />
-              <Route path="/preview" exact render={() => <Preview />} />
+              <Route path="/preview" exact render={() => <Preview 
+                                                                      gardenObjects={fakeObjectList}
+                                                                      plants={fakePlantList}/>} /> 
+                                                                      {/* this.state.existingPlants.concat(this.state.suggestedPlants) */}
               <Route path="/build" exact render={() => <Build 
                                                                       addGardenObject={this.addGardenObject}
                                                                       moveGardenObject={this.moveGardenObject} 

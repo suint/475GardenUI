@@ -131,3 +131,28 @@ li:hover {
 .Collapsible__contentInner {
     overflow-x: scroll;
 }
+#layout {
+    background-color: white;
+    height: 600px;
+    width: 575px;
+    float: left;
+    position: relative;
+}
+#info {
+    text-align: left;
+    height: 600px;
+    background-color: #a1ca28;
+    float: right;
+    padding: 20px;
+    width:300px;
+    overflow: scroll;
+}
+#design {
+    width:875px;
+    margin: 2em auto;
+}
+.print-info {
+    background-color: white;
+    white-space: pre-wrap;
+    padding: 1em;
+}
