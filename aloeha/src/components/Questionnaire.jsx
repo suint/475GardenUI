@@ -175,7 +175,7 @@ class Questionnaire extends Component {
             options={this.state.moistureOptions}
             value={this.props.newUser.moisture}
             placeholder={'Select Moisture Level'}
-            handleChange={this.handleInput}
+            handleChange={this.handleStringInput}
             key="check2"
           />
 
@@ -185,7 +185,7 @@ class Questionnaire extends Component {
             options={this.state.soilOptions}
             value={this.props.newUser.soil}
             placeholder={'Select Soil Type'}
-            handleChange={this.handleInput}
+            handleChange={this.handleStringInput}
             key="sel1"
           />
 
@@ -195,7 +195,7 @@ class Questionnaire extends Component {
             options={this.state.sunlightOptions}
             value={this.props.newUser.sunlight}
             placeholder={'Select Sunlight Level'}
-            handleChange={this.handleInput}
+            handleChange={this.handleStringInput}
             key="sel2"
           />
 

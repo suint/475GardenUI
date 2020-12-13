@@ -23,10 +23,26 @@ class Add extends React.Component <any, AddState> {
         super(props);
         this.state = {
             recommendedPlants: [],
-            selectedPlants: [],
+            selectedPlants: [...this.props.recommendedPlants],
             user: this.props.user
         }
         this.checkPlant = this.checkPlant.bind(this);
+        this.handleEvent = this.handleEvent.bind(this);
+    }
+
+    handleEvent = (clickedPlant: Plant) => {
+        const { recommendedPlants, selectedPlants } = this.state;
+        // checks if clicked plant is in search plants
+        const isInSearchResults = recommendedPlants.some(result => result.id === clickedPlant.id);
+        const newRecommendedPlants = isInSearchResults ? recommendedPlants.filter(i => i.id  !== clickedPlant.id) : [...recommendedPlants, clickedPlant];
+        const newSelectedPlants = isInSearchResults ? [...selectedPlants, clickedPlant] : selectedPlants.filter(i => i.id !== clickedPlant.id);
+
+        this.setState({
+            // check which list clicked plant starts in and remove if it's in that one, add if it's not
+            recommendedPlants: newRecommendedPlants,
+            selectedPlants: newSelectedPlants
+        })
+        this.props.onPlantSelect(newSelectedPlants);
     }
 
     componentDidMount = () => {
@@ -46,8 +62,8 @@ class Add extends React.Component <any, AddState> {
             
         // filters native plants based on questionnaire answers
         let recPlants = nativePlants.filter((plant: Plant) => {return this.checkPlant(plant)});
-        
-        this.setState({recommendedPlants: recPlants});
+        console.log(recPlants);
+        this.setState({recommendedPlants: this.state.recommendedPlants.concat(recPlants)});
 
     }
 
@@ -137,6 +153,7 @@ class Add extends React.Component <any, AddState> {
                         if (!this.state.selectedPlants.some((selPlant: Plant) => {return selPlant.id == plant.id})) {
                             // blooms are one of the desired colors 
                             if (!colorsWanted || this.checkColors(plant, colorsWanted)) {
+                                console.log(plant);
                                 return true;
                             }
                         }
@@ -158,7 +175,7 @@ class Add extends React.Component <any, AddState> {
                         because each category of plants requires a different amount of sunlight. 
                         <br /> Once you have selected your plants, click "Next" to start building your garden!
                     </p>
-                    <PlantSelect plants={this.state.recommendedPlants} />
+                    <PlantSelect handleClick={this.handleEvent} plants={this.state.recommendedPlants} />
                 </div>
                 <div id="garden-plants" className="plants">
 
@@ -168,8 +185,8 @@ class Add extends React.Component <any, AddState> {
     }
 }
 
-class PlantSelect extends React.Component<{plants: Plant[]}, {}> {
-    constructor(props: {plants: Plant[]}) { 
+class PlantSelect extends React.Component<{plants: Plant[], handleClick(plant: Plant): any}, {}> {
+    constructor(props: {plants: Plant[], handleClick(plant: Plant): any}) { 
         super(props);
     }
 
@@ -183,22 +200,22 @@ class PlantSelect extends React.Component<{plants: Plant[]}, {}> {
             <div>
                 <div className="plant-category">
                     <Collapsible trigger="Plants and Shrubs" >
-                        {shrubs.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {shrubs.map((obj) => {return <PlantDisplay handleClick={this.props.handleClick} plant={obj} />})}
                     </Collapsible>
                 </div> 
                 <div className="plant-category">
                     <Collapsible trigger="Small Trees" >
-                        {smallTrees.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {smallTrees.map((obj) => {return <PlantDisplay handleClick={this.props.handleClick} plant={obj} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
                     <Collapsible trigger="Medium-Sized Trees" >
-                        {medTrees.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {medTrees.map((obj) => {return <PlantDisplay handleClick={this.props.handleClick} plant={obj} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
                     <Collapsible trigger="Largest Trees" >
-                        {lgstTrees.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {lgstTrees.map((obj) => {return <PlantDisplay handleClick={this.props.handleClick} plant={obj} />})}
                     </Collapsible>
                 </div>
             </div>
@@ -207,10 +224,10 @@ class PlantSelect extends React.Component<{plants: Plant[]}, {}> {
 } 
 
 
-const PlantDisplay = (props: {plant: Plant}) => {
+const PlantDisplay = (props: {plant: Plant, handleClick(plant: Plant): any}) => {
     return (
         <div className="plant-info">
-            <button>Add plant</button>
+            <button onClick={() => props.handleClick(props.plant)}>Add plant</button>
             <Collapsible trigger={props.plant.latinName}>
                 <PlantInfo plant={props.plant} />
                 {/* TODO: straighten out this whole thing with the plant info display... this way it gets cut off :( */}

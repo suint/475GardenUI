@@ -12,7 +12,6 @@ type UserState = {
   newUser: User,
   existingPlants: Plant[],
   recommendedPlants: Plant[],
-  suggestedPlants: Plant[],
   gardenObjects: GardenObject[],
   gardenPlants: Plant[],
   currentKey: number
@@ -132,7 +131,6 @@ export class App extends React.Component<{}, UserState>{
       },
       existingPlants: [],
       recommendedPlants: [],
-      suggestedPlants: [],
       gardenPlants: [], // TODO: refactor this later to something less confusing 
       gardenObjects: [],
       //gardenPlants = plants the user has selected in Add page
@@ -257,7 +255,7 @@ export class App extends React.Component<{}, UserState>{
                                                                       onCBColorsChange={this.handleCBColors} />} />
               <Route path="/add" exact render={() => <Add 
                                                                       user={this.state.newUser}
-                                                                      plants={fakePlantList}
+                                                                      recommendedPlants={this.state.recommendedPlants}
                                                                       onPlantSelect={this.handleRecommendedPlantSelect}/>} />
               <Route path="/preview" exact render={() => <Preview />} />
               <Route path="/build" exact render={() => <Build 
