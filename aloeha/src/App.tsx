@@ -225,17 +225,13 @@ export class App extends React.Component<{}, UserState>{
     console.log(this.state);
   }
 
-  handleExistingPlantSelect(e: Plant) {
-    let newExistingPlants = this.state.existingPlants.slice();
-    newExistingPlants.push(e);
-    this.setState({existingPlants: newExistingPlants});
+  handleExistingPlantSelect(e: Plant[]) {
+    this.setState({existingPlants: e});
     console.log(this.state);
   }
 
-  handleRecommendedPlantSelect(e: Plant) {
-    let newRecommendedPlants = this.state.existingPlants.slice();
-    newRecommendedPlants.push(e);
-    this.setState({recommendedPlants: newRecommendedPlants});
+  handleRecommendedPlantSelect(e: Plant[]) {
+    this.setState({recommendedPlants: e});
     console.log(this.state);
   }
 
