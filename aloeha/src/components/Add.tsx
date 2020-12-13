@@ -43,22 +43,22 @@ class PlantSelect extends React.Component<{plants: Plant[]}, {}> {
             <div>
                 <div className="plant-category">
                     <Collapsible trigger="Plants and Shrubs" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} onClick={() => {}} />})}
                     </Collapsible>
                 </div> 
                 <div className="plant-category">
                     <Collapsible trigger="Small Trees" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} onClick={() => {}} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
                     <Collapsible trigger="Medium-Sized Trees" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} onClick={() => {}} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
                     <Collapsible trigger="Largest Trees" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} />})}
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} onClick={() => {}} />})}
                     </Collapsible>
                 </div>
             </div>
