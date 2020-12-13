@@ -124,7 +124,20 @@ li:hover {
 }
 #layout {
     background-color: white;
-    height: 575px;
+    height: 600px;
     width: 575px;
+    float: left;
     margin: 25px auto;
+}
+#info {
+    text-align: left;
+    height: 600px;
+    background-color: #a1ca28;
+    float: right;
+    padding: 20px;
+    width:300px;
+}
+#design {
+    width:875px;
+    margin: 0 auto;
 }
