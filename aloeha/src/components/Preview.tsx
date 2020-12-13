@@ -1,10 +1,7 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import Draggable, {DraggableBounds} from 'react-draggable';
-import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.27.30 PM.png"
 import ImageCarousel from 'react-responsive-carousel';
-import { transcode } from "buffer";
-import { transform } from "lodash";
 
 type PreviewProps = {
     gardenObjects: GardenObject[],
@@ -50,7 +47,6 @@ class Preview extends React.Component<any, PreviewState> {
                     <h4>Plant Information</h4>
                     {this.props.plants.map((plant: Plant) => {return <PrintablePlantInfo plant={plant} print={false} />})}
                 </div>
-                <img src={placeholder} style={{ width: "600px" }} />
             </div>
         )
     }
