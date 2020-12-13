@@ -3,7 +3,8 @@ import Collapsible from "react-collapsible";
 import { Link, withRouter } from "react-router-dom";
 import './add.css';
 import { PlantInfo } from "./Select";
-import { trackPromise } from "react-promise-tracker";
+import _ from 'lodash';
+import { usePromiseTracker, trackPromise } from "react-promise-tracker";
 
 type AddProps = {
     user: User,
@@ -23,7 +24,7 @@ class Add extends React.Component <any, AddState> {
         super(props);
         this.state = {
             recommendedPlants: [],
-            selectedPlants: [...this.props.recommendedPlants],
+            selectedPlants: this.props.recommendedPlants.concat(this.props.existingPlants), // all plants that have already been picked
             user: this.props.user
         }
         this.checkPlant = this.checkPlant.bind(this);
@@ -53,17 +54,16 @@ class Add extends React.Component <any, AddState> {
         .then(result => result.json())
         .then(
             (result) => {
-                nativePlants = result.filter((obj: Plant) => obj.delawareNative)
+                nativePlants = result.filter((obj: Plant) => obj.delawareNative);
+                // filters native plants based on questionnaire answers
+                let recPlants = nativePlants.filter((plant: Plant) => {return this.checkPlant(plant)});
+                this.setState({recommendedPlants: this.state.recommendedPlants.concat(recPlants)});
                 console.log(result);
             },
             (error) => {
             }
             ));
             
-        // filters native plants based on questionnaire answers
-        let recPlants = nativePlants.filter((plant: Plant) => {return this.checkPlant(plant)});
-        console.log(recPlants);
-        this.setState({recommendedPlants: this.state.recommendedPlants.concat(recPlants)});
 
     }
 
@@ -121,7 +121,7 @@ class Add extends React.Component <any, AddState> {
     // return true if plant flower color is one of the colors wanted
     checkColors = (plant: Plant, colors: string[]) => {
         const { description } = plant;
-        if (description) {
+        if (description && !_.isEmpty(colors)) {
             var regex = /Flower Color: ([a-zA-Z]+)/g;
             let bloomColor = regex.exec(description);
             if (bloomColor) {
@@ -142,26 +142,43 @@ class Add extends React.Component <any, AddState> {
     checkPlant = (plant: Plant) => {
         const {moisture, sunlight, soil, colorsWanted, seasonsWanted} = this.state.user;
         const plantLight = plant.light ? plant.light : -1;
+        let fits = true;
 
         // check plant growing conditions fit the garden (moisture level, sunlight levels, soil type)
         if (plant.moisture == moisture.toUpperCase() || !plant.moisture || !moisture || plant.moisture == "ANY") {
-            if (this.checkLight(sunlight, plantLight)) {
-                if (plant.soilType == soil.toUpperCase() || !soil || !plant.soilType || plant.soilType == "ANY" || soil == "Any Soil") {
-                    //check it blooms during one of the desired seasons
-                    if (!plant.bloomTime || !seasonsWanted || seasonsWanted.includes("Year Round") || this.checkSeasons(plant.bloomTime, seasonsWanted)){
-                        // avoid duplicates with selected plants 
-                        if (!this.state.selectedPlants.some((selPlant: Plant) => {return selPlant.id == plant.id})) {
-                            // blooms are one of the desired colors 
-                            if (!colorsWanted || this.checkColors(plant, colorsWanted)) {
-                                console.log(plant);
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
+            console.log("moisture OK");
+        } else {
+            fits = false;
         }
-        return false;
+        if (this.checkLight(sunlight, plantLight)) {
+            console.log("light OK");
+        } else {
+            fits = false;
+        }
+        if (plant.soilType == soil.toUpperCase() || !soil || !plant.soilType || plant.soilType == "ANY" || soil == "Any Soil") {
+            console.log("soil OK");
+        } else {
+            fits = false;
+        }
+        //check it blooms during one of the desired seasons
+        if (!plant.bloomTime || _.isEmpty(seasonsWanted) || seasonsWanted.includes("Year Round") || this.checkSeasons(plant.bloomTime, seasonsWanted)){
+            console.log("bloom time OK");
+        } else {
+            fits = false;
+        }
+        // avoid duplicates with selected plants 
+        if (!this.state.selectedPlants.some((selPlant: Plant) => {return selPlant.id == plant.id})) {
+            console.log("no duplicates");
+        } else {
+            fits = false;
+        }
+        // blooms are one of the desired colors 
+        if (!colorsWanted || this.checkColors(plant, colorsWanted)) {
+            console.log("colors OK");
+        } else {
+            fits = false;
+        }
+        return fits;
     }
 
     render() {
@@ -178,56 +195,55 @@ class Add extends React.Component <any, AddState> {
                     <PlantSelect handleClick={this.handleEvent} plants={this.state.recommendedPlants} />
                 </div>
                 <div id="garden-plants" className="plants">
-
+                    {this.state.selectedPlants.map((obj) => {return <PlantDisplay handleClick={this.handleEvent} plant={obj} />})}
                 </div>
             </div>
         )
     }
 }
 
-class PlantSelect extends React.Component<{plants: Plant[], handleClick(plant: Plant): any}, {}> {
-    constructor(props: {plants: Plant[], handleClick(plant: Plant): any}) { 
-        super(props);
-    }
-
-    render() {
-        const {plants} = this.props;
-        let shrubs = plants.filter((plant: Plant) => { return plant.canopy == "FLOOR" });
-        let smallTrees = plants.filter((plant: Plant) => { return plant.canopy == "UNDERSTORY" });
-        let medTrees = plants.filter((plant: Plant) => { return plant.canopy == "CANOPY" });
-        let lgstTrees = plants.filter((plant: Plant) => { return plant.canopy == "EMERGENT" });
+const PlantSelect = (props: {plants: Plant[], handleClick(plant: Plant): any}) => {
+    
+    const { promiseInProgress } = usePromiseTracker();
+    let shrubs = props.plants.filter((plant: Plant) => { return plant.canopy == "FLOOR" });
+    let smallTrees = props.plants.filter((plant: Plant) => { return plant.canopy == "UNDERSTORY" });
+    let medTrees = props.plants.filter((plant: Plant) => { return plant.canopy == "CANOPY" });
+    let lgstTrees = props.plants.filter((plant: Plant) => { return plant.canopy == "EMERGENT" });
+    if ( promiseInProgress ) {
+        return <p>Loading recommendations...</p>;
+    } else {
         return (
             <div>
                 <div className="plant-category">
                     <Collapsible trigger="Plants and Shrubs" >
-                        {shrubs.map((obj) => {return <PlantDisplay handleClick={this.props.handleClick} plant={obj} />})}
+                        {shrubs.map((obj) => {return <PlantDisplay handleClick={props.handleClick} plant={obj} />})}
                     </Collapsible>
                 </div> 
                 <div className="plant-category">
                     <Collapsible trigger="Small Trees" >
-                        {smallTrees.map((obj) => {return <PlantDisplay handleClick={this.props.handleClick} plant={obj} />})}
+                        {smallTrees.map((obj) => {return <PlantDisplay handleClick={props.handleClick} plant={obj} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
                     <Collapsible trigger="Medium-Sized Trees" >
-                        {medTrees.map((obj) => {return <PlantDisplay handleClick={this.props.handleClick} plant={obj} />})}
+                        {medTrees.map((obj) => {return <PlantDisplay handleClick={props.handleClick} plant={obj} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
                     <Collapsible trigger="Largest Trees" >
-                        {lgstTrees.map((obj) => {return <PlantDisplay handleClick={this.props.handleClick} plant={obj} />})}
+                        {lgstTrees.map((obj) => {return <PlantDisplay handleClick={props.handleClick} plant={obj} />})}
                     </Collapsible>
                 </div>
             </div>
         )
     }
-} 
+}
 
 
 const PlantDisplay = (props: {plant: Plant, handleClick(plant: Plant): any}) => {
     return (
         <div className="plant-info">
-            <button onClick={() => props.handleClick(props.plant)}>Add plant</button>
+            <button onClick={() => props.handleClick(props.plant)}>+</button>
             <Collapsible trigger={props.plant.latinName}>
                 <PlantInfo plant={props.plant} />
                 {/* TODO: straighten out this whole thing with the plant info display... this way it gets cut off :( */}

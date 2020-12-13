@@ -128,3 +128,6 @@ li:hover {
 .garden-obj {
     width: fit-content;
 }
+.Collapsible__contentInner {
+    overflow-x: scroll;
+}

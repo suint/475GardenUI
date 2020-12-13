@@ -145,6 +145,7 @@ export class App extends React.Component<{}, UserState>{
     this.handleNumInput = this.handleNumInput.bind(this);
     this.handleStringInput = this.handleStringInput.bind(this);
     this.handleExistingPlantSelect = this.handleExistingPlantSelect.bind(this);
+    this.handleRecommendedPlantSelect = this.handleRecommendedPlantSelect.bind(this);
 
   }
 
@@ -224,13 +225,17 @@ export class App extends React.Component<{}, UserState>{
     console.log(this.state);
   }
 
-  handleExistingPlantSelect(e: Plant[]) {
-    this.setState({existingPlants: e});
+  handleExistingPlantSelect(e: Plant) {
+    let newExistingPlants = this.state.existingPlants.slice();
+    newExistingPlants.push(e);
+    this.setState({existingPlants: newExistingPlants});
     console.log(this.state);
   }
 
-  handleRecommendedPlantSelect(e: Plant[]) {
-    this.setState({recommendedPlants: e});
+  handleRecommendedPlantSelect(e: Plant) {
+    let newRecommendedPlants = this.state.existingPlants.slice();
+    newRecommendedPlants.push(e);
+    this.setState({recommendedPlants: newRecommendedPlants});
     console.log(this.state);
   }
 
@@ -255,6 +260,7 @@ export class App extends React.Component<{}, UserState>{
                                                                       onCBColorsChange={this.handleCBColors} />} />
               <Route path="/add" exact render={() => <Add 
                                                                       user={this.state.newUser}
+                                                                      existingPlants={this.state.existingPlants}
                                                                       recommendedPlants={this.state.recommendedPlants}
                                                                       onPlantSelect={this.handleRecommendedPlantSelect}/>} />
               <Route path="/preview" exact render={() => <Preview />} />
