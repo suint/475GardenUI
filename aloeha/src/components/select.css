@@ -127,7 +127,6 @@ li:hover {
     height: 600px;
     width: 575px;
     float: left;
-    margin: 25px auto;
 }
 #info {
     text-align: left;
@@ -139,5 +138,5 @@ li:hover {
 }
 #design {
     width:875px;
-    margin: 0 auto;
+    margin: 2em auto;
 }
