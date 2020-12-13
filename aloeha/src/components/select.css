@@ -94,6 +94,12 @@ li:hover {
 .bloom-yes {
     width: 40px;
     height: 10px;
+    background-color: olivedrab;
+}
+.bloom-no {
+    width: 40px;
+    height: 10px;
+    background-color: tomato;
     background-color: black;
 }
 
@@ -121,6 +127,9 @@ li:hover {
 }
 .garden-obj {
     width: fit-content;
+}
+.Collapsible__contentInner {
+    overflow-x: scroll;
 }
 #layout {
     background-color: white;
