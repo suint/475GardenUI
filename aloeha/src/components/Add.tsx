@@ -221,7 +221,7 @@ const PlantSelect = (props: {plants: Plant[], handleClick(plant: Plant): any}) =
                 </div> 
                 <div className="plant-category">
                     <Collapsible trigger="Small Trees" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} onClick={() => {}} />})}
+                        {smallTrees.map((obj) => {return <PlantDisplay plant={obj} handleClick={props.handleClick} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
