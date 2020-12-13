@@ -43,22 +43,22 @@ class PlantSelect extends React.Component<{plants: Plant[]}, {}> {
             <div>
                 <div className="plant-category">
                     <Collapsible trigger="Plants and Shrubs" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} onClick={() => {}} />})}
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} handleClick={() => {}} />})}
                     </Collapsible>
                 </div> 
                 <div className="plant-category">
                     <Collapsible trigger="Small Trees" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} onClick={() => {}} />})}
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} handleClick={() => {}} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
                     <Collapsible trigger="Medium-Sized Trees" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} onClick={() => {}} />})}
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} handleClick={() => {}} />})}
                     </Collapsible>
                 </div>
                 <div className="plant-category">
                     <Collapsible trigger="Largest Trees" >
-                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} onClick={() => {}} />})}
+                        {this.props.plants.map((obj) => {return <PlantDisplay plant={obj} handleClick={() => {}} />})}
                     </Collapsible>
                 </div>
             </div>
@@ -67,10 +67,10 @@ class PlantSelect extends React.Component<{plants: Plant[]}, {}> {
 } 
 
 
-export const PlantDisplay = (props: {plant: Plant, onClick: () => void}) => {
+export const PlantDisplay = (props: {plant: Plant, handleClick(plant: Plant):any}) => {
     return (
         <div className="plant-info">
-            <button onClick={props.onClick}>Add plant</button>
+            <button onClick={() => props.handleClick(props.plant)}>Add plant</button>
             <Collapsible trigger={props.plant.latinName}>
                 <PlantInfo plant={props.plant} />
                 {/* TODO: straighten out this whole thing with the plant info display... this way it gets cut off :( */}

@@ -2,9 +2,12 @@ import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import Draggable, {DraggableBounds} from 'react-draggable';
 import Accordion from 'react-bootstrap/Accordion'
+import Collapsible from "react-collapsible";
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import _ from "lodash";
+import { PlantDisplay } from "./Add"
+import Default from './img/reference pictures/default_plant.png'
 
 const dummyPlant: GardenObject = {
     key: 0,
@@ -30,10 +33,17 @@ class Build extends React.Component<any, {}> {
         this.objectDrag = this.objectDrag.bind(this);
     }
 
-    objectAdded = () => {
-        this.props.addGardenObject(dummyPlant2.latinName, "https://crouton.net/crouton.png");
-        this.forceUpdate();
+    objectAdded = (plant: Plant) => {
+        if(plant.images){
+            this.props.addGardenObject(plant.latinName, plant.images[0]);
+            this.forceUpdate();
+        }
+        else{
+            this.props.addGardenObject(plant.latinName, Default);
+            this.forceUpdate();
+        }
     }
+
 
     objectDrag = () => {}
 
@@ -43,39 +53,11 @@ class Build extends React.Component<any, {}> {
                 <h1>Build widget goes here</h1>
                 <div id="garden-select">
                     <p>Drag and drop your plants and objects from the drop downs on the left to build your garden. Click next to see your garden in a different season, age, and view, or you can save your garden project here.</p>
-                    <Accordion>
-                        <Card>
-                            <Card.Header>
-                                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                    Existing Plants
-                                </Accordion.Toggle>
-                            </Card.Header>
-                            <Accordion.Collapse eventKey="0">
-                                
-                                <button onClick={this.objectAdded}>Add a plant</button>
-                            </Accordion.Collapse>
-                        </Card>
-                        <Card>
-                            <Card.Header>
-                                <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                                    Selected Plants
-                                </Accordion.Toggle>
-                            </Card.Header>
-                            <Accordion.Collapse eventKey="1">
-                                <Card.Body>Hello! I'm another body</Card.Body>
-                            </Accordion.Collapse>
-                        </Card>
-                        <Card>
-                            <Card.Header>
-                                <Accordion.Toggle as={Button} variant="link" eventKey="2">
-                                    Garden Objects
-                                </Accordion.Toggle>
-                            </Card.Header>
-                            <Accordion.Collapse eventKey="2">
-                                <Card.Body>Hello! I'm another body</Card.Body>
-                            </Accordion.Collapse>
-                        </Card>
-                    </Accordion>
+                    <div>
+                        {console.log(this.props.existingPlants)}
+                {/* <PlantSelection plants={this.props.existingPlants} objectAdded={this.objectAdded} trigger="Existing Plants"/>   */}
+            </div>
+
             
                 </div>
                 <div id="garden-box" style={{height: '600px', width: '500px', position: 'relative'}}>
@@ -141,6 +123,16 @@ class DraggableObject extends React.Component<any, DraggableState> {
             </Draggable>
         )
     }
+}
+
+const PlantSelection = (props:{plants: Plant[], objectAdded(plant:Plant):any, trigger: string}) => {
+    return(
+    <div className="plant-category">
+        <Collapsible trigger="Plants" >
+            {props.plants.map((obj:Plant) => {return <PlantDisplay plant={obj} handleClick={props.objectAdded} />})}
+        </Collapsible>
+    </div> 
+    )
 }
 
 export default withRouter(Build);

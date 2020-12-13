@@ -274,7 +274,8 @@ export class App extends React.Component<{}, UserState>{
               <Route path="/build" exact render={() => <Build 
                                                                       addGardenObject={this.addGardenObject}
                                                                       moveGardenObject={this.moveGardenObject} 
-                                                                      gardenObjects={this.state.gardenObjects}/>} />
+                                                                      gardenObjects={this.state.gardenObjects}/>}
+                                                                      existingPlants={fakePlantList} />
           </Switch>
         </Router>
       </div>
