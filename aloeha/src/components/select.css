@@ -135,8 +135,14 @@ li:hover {
     float: right;
     padding: 20px;
     width:300px;
+    overflow: scroll;
 }
 #design {
     width:875px;
     margin: 2em auto;
+}
+.print-info {
+    background-color: white;
+    white-space: pre-wrap;
+    padding: 1em;
 }

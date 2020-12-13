@@ -2,6 +2,7 @@ import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import Draggable, {DraggableBounds} from 'react-draggable';
 import placeholder from "./img/reference pictures/Screen Shot 2020-10-18 at 10.27.30 PM.png"
+import ImageCarousel from 'react-responsive-carousel';
 import { transcode } from "buffer";
 import { transform } from "lodash";
 
@@ -47,12 +48,31 @@ class Preview extends React.Component<any, PreviewState> {
                     <button onClick={this.toggleViewMode}>{this.state.viewMode}</button>
                     <button>Get printable version</button>
                     <h4>Plant Information</h4>
-                        
+                    {this.props.plants.map((plant: Plant) => {return <PrintablePlantInfo plant={plant} print={false} />})}
                 </div>
                 <img src={placeholder} style={{ width: "600px" }} />
             </div>
         )
     }
+}
+
+//printable version has no images, truncated description
+const PrintablePlantInfo = (props: {plant: Plant, print: boolean}) => {
+
+    const { plant } = props;
+    return (<div className="print-info">
+        <h4>{plant.latinName}</h4>
+                {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "  "})}</p>}
+                {plant.images && !props.print && <ImageCarousel images={plant.images} />}
+                {plant.invasive && <span className="plant-badge yellow">invasive </span>}
+                {plant.delawareNative && <span className="plant-badge pink">native</span>}
+                {plant.light && plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}
+                {plant.canopy && plant.canopy > 0 && <span className="plant-badge green">canopy: {plant.canopy}</span>}
+                {plant.moisture && <span className="plant-badge blue">{plant.moisture}</span>}
+                {plant.soilType && <span className="plant-badge brown">{plant.soilType}</span>}
+                {/* {plant.bloomTime && <BloomTime times={plant.bloomTime} />} */}
+                {plant.description && <div className="description"> <p>{props.print ? plant.description.substring(0, 500) : plant.description}</p></div>}
+        </div>)
 }
 
 const ObjectDisplay = (props: {gardenObject: GardenObject, viewMode: string}) => {
