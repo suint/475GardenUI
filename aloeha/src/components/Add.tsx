@@ -67,10 +67,10 @@ class PlantSelect extends React.Component<{plants: Plant[]}, {}> {
 } 
 
 
-const PlantDisplay = (props: {plant: Plant}) => {
+export const PlantDisplay = (props: {plant: Plant, onClick: () => void}) => {
     return (
         <div className="plant-info">
-            <button>Add plant</button>
+            <button onClick={props.onClick}>Add plant</button>
             <Collapsible trigger={props.plant.latinName}>
                 <PlantInfo plant={props.plant} />
                 {/* TODO: straighten out this whole thing with the plant info display... this way it gets cut off :( */}
