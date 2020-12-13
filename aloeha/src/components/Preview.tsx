@@ -45,7 +45,7 @@ class Preview extends React.Component<any, PreviewState> {
                 </div>
                 <div id="info">
                     <h4>Options</h4>
-                    <button onClick={this.toggleViewMode}>{this.state.viewMode}</button>
+                    <button onClick={this.toggleViewMode}>{(this.state.viewMode == "Window") ? "Top-down view" : "Window view"}</button> <br />
                     <button>Get printable version</button>
                     <h4>Plant Information</h4>
                     {this.props.plants.map((plant: Plant) => {return <PrintablePlantInfo plant={plant} print={false} />})}
