@@ -137,7 +137,9 @@ class DraggableObject extends React.Component<any, DraggableState> {
 }
 
 const ItemSelection = (props: {object: string, objectAdded(name: string): any}) => {
-    return <div onClick={() => props.objectAdded(props.object)} className="plant-hover">
+    return <div className="plant-info">
+        
+        <button onClick={() => props.objectAdded(props.object)}>+</button>
         {props.object}
     </div>;
 }
