@@ -9,7 +9,7 @@ function Navbar(props: any) {
     const prevPage = pages[pageIndex-1];
     const nextPage = pages[pageIndex+1];
   return (
-    <div className="row">
+    <div id="navbar">
         {prevPage ? 
         <Link className="nav-link" to={prevPage}>
             Back
