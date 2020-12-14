@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, withRouter, useLocation } from "react-router-dom";
  
-const pages = ["/", "/select", "/questionnaire", "/add", "/design", "/build", "/preview"];
+const pages = ["/", "/select", "/questionnaire", "/add", "/build", "/preview"];
 
 function Navbar(props: any) {
     const location = useLocation();
@@ -25,9 +25,6 @@ function Navbar(props: any) {
         </Link>
         <Link className="nav-link" to={"/add"}>
             Add
-        </Link>
-        <Link className="nav-link" to={"/design"}>
-            Design
         </Link>
         <Link className="nav-link" to={"/build"}>
             Build

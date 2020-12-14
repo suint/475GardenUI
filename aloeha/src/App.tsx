@@ -263,7 +263,6 @@ export class App extends React.Component<{}, UserState>{
               <Route path="/select" exact render={() => <Select
                                                                       onPlantSelect={this.handleExistingPlantSelect} 
                                                                       existingPlants={this.state.existingPlants}/>} />
-              <Route path="/design" exact render={() => <Design />} />
               <Route path="/questionnaire" exact render={() => <Questionnaire
                                                                       newUser={this.state.newUser}
                                                                       onInputNumChange={this.handleNumInput}
