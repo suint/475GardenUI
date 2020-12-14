@@ -21,6 +21,7 @@ import Pool from './img/objects/pool.png';
 import Road from './img/objects/road.png';
 import Rock from './img/objects/rock.png';
 import { PassThrough } from "stream";
+import "./Build.css"
 
 const dummyPlant: GardenObject = {
     key: 0,
@@ -44,6 +45,7 @@ class Build extends React.Component<any, {}> {
         this.itemAdded = this.itemAdded.bind(this);
         this.plantAdded = this.plantAdded.bind(this);
         this.objectDrag = this.objectDrag.bind(this);
+
     }
 
     itemAdded = (name: string, text?: string) => {
