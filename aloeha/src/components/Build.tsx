@@ -42,7 +42,7 @@ const dummyPlant2: Plant = {
     images: ["https://crouton.net/crouton.png"]
 }
 
-const ItemList = ["Flamingo", "Bench", "Birdbath", "Fence", "Forest", "Gnome", "Path", "Patio", "Playground", "Pool", "Road", "Rock"];
+export const ItemList = ["Flamingo", "Bench", "Birdbath", "Fence", "Forest", "Gnome", "Path", "Patio", "Playground", "Pool", "Road", "Rock"];
 
 class Build extends React.Component<any, {}> {
     constructor(props: any) {
