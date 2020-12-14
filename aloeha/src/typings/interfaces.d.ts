@@ -44,15 +44,15 @@ interface Plant {
 }
 
 interface User {
-    name: string,
-    length: number,
-    width: number,
-    plotItems: string[], // Give type for Items
-    moisture: string,
-    soil: string,
-    sunlight: string,
-    seasonsWanted: string[],
-    colorsWanted: string[]
+    name?: string,
+    length?: number,
+    width?: number,
+    plotItems?: string[], // Give type for Items
+    moisture?: string,
+    soil?: string,
+    sunlight?: string,
+    seasonsWanted?: string[],
+    colorsWanted?: string[]
 }
 
 interface GardenObject {

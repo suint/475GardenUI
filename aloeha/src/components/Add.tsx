@@ -145,23 +145,23 @@ class Add extends React.Component <any, AddState> {
         let fits = true;
 
         // check plant growing conditions fit the garden (moisture level, sunlight levels, soil type)
-        if (plant.moisture == moisture.toUpperCase() || !plant.moisture || !moisture || plant.moisture == "ANY") {
+        if (!plant.moisture || !moisture || plant.moisture == "ANY" || plant.moisture == moisture.toUpperCase() ) {
             console.log("moisture OK");
         } else {
             fits = false;
         }
-        if (this.checkLight(sunlight, plantLight)) {
+        if (sunlight && this.checkLight(sunlight, plantLight)) {
             console.log("light OK");
         } else {
             fits = false;
         }
-        if (plant.soilType == soil.toUpperCase() || !soil || !plant.soilType || plant.soilType == "ANY" || soil == "Any Soil") {
+        if (!soil || plant.soilType == soil.toUpperCase() || !plant.soilType || plant.soilType == "ANY" || soil == "Any Soil") {
             console.log("soil OK");
         } else {
             fits = false;
         }
         //check it blooms during one of the desired seasons
-        if (!plant.bloomTime || _.isEmpty(seasonsWanted) || seasonsWanted.includes("Year Round") || this.checkSeasons(plant.bloomTime, seasonsWanted)){
+        if (!seasonsWanted || !plant.bloomTime || _.isEmpty(seasonsWanted) || seasonsWanted.includes("Year Round") || this.checkSeasons(plant.bloomTime, seasonsWanted)){
             console.log("bloom time OK");
         } else {
             fits = false;

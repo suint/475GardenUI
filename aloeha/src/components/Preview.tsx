@@ -8,7 +8,8 @@ import { BloomTime } from "./Select";
 
 type PreviewProps = {
     gardenObjects: GardenObject[],
-    plants: Plant[]
+    plants: Plant[],
+    user: User
 }
 
 type PreviewState = {
@@ -26,6 +27,7 @@ class Preview extends React.Component<any, PreviewState> {
             viewMode: "Top-down"
         }
         this.toggleViewMode = this.toggleViewMode.bind(this);
+        this.printDocument = this.printDocument.bind(this);
     }
 
     toggleViewMode = () => {
@@ -36,21 +38,69 @@ class Preview extends React.Component<any, PreviewState> {
         }
     }
 
+    userToString(user: User){
+        let userInfo = "";
+        if (user) {
+            if (user.moisture) {
+                userInfo += "Moisture: " + user.moisture + "\n";
+            }
+            if (user.sunlight) {
+                userInfo += "Light: " + user.sunlight + "\n";
+            }
+            if (user.soil) {
+                userInfo += "Soil: " + user.soil + "\n";
+            }
+            if (user.seasonsWanted) {
+                userInfo += "Seasons: " + user.seasonsWanted + "\n";
+            }
+            if (user.colorsWanted) {
+                userInfo += "Colors: " + user.colorsWanted + "\n";
+            }
+        }
+        return userInfo;
+    }
+
     printDocument() {  
+        const { user } = this.props;
         const layout = document.getElementById('layout');  
-        const pdf = new jsPDF('p', 'mm', 'a4') ;
+        const pdf = new jsPDF('l','mm',[297, 210]);
         if (layout) {
-        html2canvas(layout, {allowTaint: true, useCORS: true})  
+        html2canvas(layout, {allowTaint: true, useCORS: true})   //NOTE: this does not work on localhost, images replaced with default for print version
           .then((canvas) => {  
             var imgWidth = 200;  
             var pageHeight = 290;  
             var imgHeight = canvas.height * imgWidth / canvas.width;  
             var heightLeft = imgHeight;  
             const imgData = canvas.toDataURL('image/png');  
-            var position = 0;  
+            var position = 30;  
             var heightLeft = imgHeight;  
-            pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);  
-            pdf.save("garden_layout.pdf");  
+            pdf.setFontSize(30);
+            if (user && user.name){
+                pdf.text(user.name, 15, 25)
+            } 
+            pdf.addImage(imgData, 'JPEG', 15, position, imgWidth, imgHeight);  
+            pdf.addPage();
+            pdf.text("My garden conditions:", 15, 25);
+            pdf.setFontSize(11);
+            pdf.text(this.userToString(user), 15, 30);
+            
+            pdf.addPage();
+            pdf.setFontSize(30);
+            pdf.text("Plant info:", 15, 25);
+            const info = document.getElementById("plant-info");
+            if (info){
+                console.log(info.innerHTML)
+                pdf.html(info, {
+                    callback: function (doc) {
+                      pdf.save("garden_layout.pdf");
+                    },
+                    html2canvas: {
+                        scale: 0.3
+                    },
+                    x: 15,
+                    y: 25   
+                 });
+            } 
           });  
       }
     }
@@ -67,7 +117,9 @@ class Preview extends React.Component<any, PreviewState> {
                     <button onClick={this.toggleViewMode}>{(this.state.viewMode == "Window") ? "Top-down view" : "Window view"}</button> <br />
                     <button onClick={this.printDocument}>Get printable version</button>
                     <h4>Plant Information</h4>
-                    {this.props.plants.map((plant: Plant) => {return <PrintablePlantInfo plant={plant} />})}
+                    <div id="plant-info">
+                        {this.props.plants.map((plant: Plant) => {return <PrintablePlantInfo plant={plant} />})}
+                    </div>
                 </div>
             </div>
         )
@@ -78,7 +130,7 @@ class Preview extends React.Component<any, PreviewState> {
 const PrintablePlantInfo = (props: {plant: Plant}) => {
 
     const { plant } = props;
-    return (<div className="print-info">
+    return (<div className="print-info" id={plant.id}>
         <h4>{plant.latinName}</h4>
                 {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "  "})}</p>}
                 {plant.invasive && <span className="plant-badge yellow">invasive </span>}
@@ -107,9 +159,8 @@ const ObjectDisplay = (props: {gardenObject: GardenObject, viewMode: string}) =>
         <Draggable position={{x: x, y: y}} positionOffset={offset} bounds={bounds} disabled={true}> 
             <div className="garden-obj">
             <img src={props.gardenObject.image} style={{"transform": imgTransformStyle}}></img>
-                    <p>{x}, {y}</p>
-                    <p>{props.gardenObject.name}</p>
-                    <p>{props.viewMode}</p>
+                    <p>{(props.viewMode == "Top-down")? x : ""}, {(props.viewMode == "Top-down") ? y : ""}</p>
+                    <p>{(props.viewMode == "Top-down") ? props.gardenObject.name: ""}</p>
             </div>
         </Draggable>
     )

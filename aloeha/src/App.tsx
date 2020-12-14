@@ -18,6 +18,18 @@ type UserState = {
   currentKey: number
 };
 
+const fakeUser: User = {
+  name: "my garden",
+  length: 234,
+  width: 1203,
+  plotItems: [],
+  moisture: "buh",
+  soil: "12323r",
+  sunlight: "bababba",
+  seasonsWanted: ["aaaaa"],
+  colorsWanted: ["yellow"]
+}
+
 const fakePlantList = [
   {
     "id":"5faee018cf5cbb3850ce4c5a",
@@ -279,7 +291,8 @@ export class App extends React.Component<{}, UserState>{
                                                                       onPlantSelect={this.handleRecommendedPlantSelect}/>} />
               <Route path="/preview" exact render={() => <Preview 
                                                                       gardenObjects={this.state.gardenObjects}
-                                                                      plants={fakePlantList}/>} /> 
+                                                                      plants={fakePlantList}
+                                                                      user={fakeUser}/>} /> 
                                                                       {/* this.state.existingPlants.concat(this.state.suggestedPlants) */}
               <Route path="/build" exact render={() => <Build 
                                                                       addGardenObject={this.addGardenObject}
