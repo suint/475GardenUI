@@ -153,22 +153,42 @@ const PlantDisplay = (props: PlantDisProps) => {
         </Hover>
     </ReactHover>
 }
+
+// returns the seasons something blooms in
+const findSeasons = (bloomTime: boolean[]) => {
+    let seasons = [];
+    // winter is dec, jan, feb; spring is mar, apr, may; summer is june, july, aug; 
+    // fall is sept, oct, nov (meterological seasons)
+    for (var a=1; a<13; a++) {
+        if ((a === 1 && bloomTime[a]) || (a === 2 && bloomTime[a]) || (a === 12 && bloomTime[a]) ) {
+            seasons.push("Winter");
+        } else if ((a === 3&& bloomTime[a])  || (a === 4&& bloomTime[a])  || (a === 5 && bloomTime[a]) ) {
+            seasons.push("Spring");
+        } else if ((a === 6 && bloomTime[a]) || (a === 7 && bloomTime[a]) || (a === 8 && bloomTime[a]) ) {
+            seasons.push("Summer");
+        } else if ((a === 9 && bloomTime[a]) || (a === 10 && bloomTime[a]) || (a === 11&& bloomTime[a]) ) {
+            seasons.push("Fall")
+        }
+    }
+    return seasons;
+}
   
 // TODO: add bloom time
 export const PlantInfo = (props: {plant: Plant}) => {
     const { plant } = props;
+    console.log("srgsdfsdf");
     return (<div className="plant-hover">
         <h3>{plant.latinName}</h3>
                 {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "  "})}</p>}
                 {/* REMOVE PLACEHOLDER IMAGE LATER */}
-                {plant.images ? <ImageCarousel images={plant.images} /> : <img src="https://i.imgur.com/DYxP8xq.jpeg" />}
+                {plant.images ? <ImageCarousel images={plant.images} /> : <p><em>No image available.</em></p>}
                 {plant.invasive && <span className="plant-badge yellow">invasive </span>}
                 {plant.delawareNative && <span className="plant-badge pink">native</span>}
                 {plant.light && plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}
-                {plant.canopy && <span className="plant-badge green">canopy: {plant.canopy}</span>}
+                {plant.canopy && <span className="plant-badge purple">{plant.canopy}</span>}
                 {plant.moisture && <span className="plant-badge blue">{plant.moisture}</span>}
                 {plant.soilType && <span className="plant-badge brown">{plant.soilType}</span>}
-                {/* {plant.bloomTime && <BloomTime times={plant.bloomTime} />} */}
+                {plant.bloomTime && <BloomTime times={plant.bloomTime} />}
                 {plant.description && <div className="description"> <p>{plant.description}</p></div>}
         </div>)
 }
@@ -187,10 +207,14 @@ export const ImageCarousel = (props: {images: string[]}) => {
 
 export const BloomTime = (props: {times: boolean[]}) => {
     const { times } = props;
+    const seasons = findSeasons(times);
     return (
-        <div className="bloom-times">
-            {times.map((month: boolean) => month ? <span className="bloom-yes" /> : <span className="bloom-no" />)}
-        </div>
+        <span className="bloom-times">
+            {seasons.includes("Winter") && <span className="plant-badge lightblue">WINTER</span>}
+            {seasons.includes("Spring") && <span className="plant-badge lightpink">SPRING</span>}
+            {seasons.includes("Summer") && <span className="plant-badge lightgreen">SUMMER</span>}
+            {seasons.includes("Fall") && <span className="plant-badge lightorange">FALL</span>}
+        </span>
     )
 }
 

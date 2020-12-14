@@ -278,7 +278,7 @@ export class App extends React.Component<{}, UserState>{
                                                                       recommendedPlants={this.state.recommendedPlants}
                                                                       onPlantSelect={this.handleRecommendedPlantSelect}/>} />
               <Route path="/preview" exact render={() => <Preview 
-                                                                      gardenObjects={fakeObjectList}
+                                                                      gardenObjects={this.state.gardenObjects}
                                                                       plants={fakePlantList}/>} /> 
                                                                       {/* this.state.existingPlants.concat(this.state.suggestedPlants) */}
               <Route path="/build" exact render={() => <Build 

@@ -97,19 +97,19 @@ class Add extends React.Component <any, AddState> {
         // winter is dec, jan, feb; spring is mar, apr, may; summer is june, july, aug; 
         // fall is sept, oct, nov (meterological seasons)
         for (var a=1; a<13; a++) {
-            if (a == 1 || a == 2 || a == 12) {
+            if ((a == 1 && bloomTime[a]) || (a == 2 && bloomTime[a]) || (a == 12 && bloomTime[a]) ) {
                 if (seasonsWanted.includes("Winter")) {
                     return true;
                 }
-            } else if (a == 3 || a == 4 || a == 5) {
+            } else if ((a == 3&& bloomTime[a])  || (a == 4&& bloomTime[a])  || (a == 5 && bloomTime[a]) ) {
                 if (seasonsWanted.includes("Spring")) {
                     return true;
                 }
-            } else if (a == 6 || a == 7 || a == 8) {
+            } else if ((a == 6 && bloomTime[a]) || (a == 7 && bloomTime[a]) || (a == 8 && bloomTime[a]) ) {
                 if (seasonsWanted.includes("Summer")) {
                     return true;
                 }
-            } else if (a == 9 || a == 10 || a == 11) {
+            } else if ((a == 9 && bloomTime[a]) || (a == 10 && bloomTime[a]) || (a == 11&& bloomTime[a]) ) {
                 if (seasonsWanted.includes("Fall")) {
                     return true;
                 }

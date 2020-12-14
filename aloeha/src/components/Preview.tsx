@@ -4,6 +4,7 @@ import Draggable, {DraggableBounds} from 'react-draggable';
 import ImageCarousel from 'react-responsive-carousel';
 import html2canvas from 'html2canvas';  
 import jsPDF from 'jspdf';
+import { BloomTime } from "./Select";
 
 type PreviewProps = {
     gardenObjects: GardenObject[],
@@ -66,7 +67,7 @@ class Preview extends React.Component<any, PreviewState> {
                     <button onClick={this.toggleViewMode}>{(this.state.viewMode == "Window") ? "Top-down view" : "Window view"}</button> <br />
                     <button onClick={this.printDocument}>Get printable version</button>
                     <h4>Plant Information</h4>
-                    {this.props.plants.map((plant: Plant) => {return <PrintablePlantInfo plant={plant} print={false} />})}
+                    {this.props.plants.map((plant: Plant) => {return <PrintablePlantInfo plant={plant} />})}
                 </div>
             </div>
         )
@@ -74,21 +75,20 @@ class Preview extends React.Component<any, PreviewState> {
 }
 
 //printable version has no images, truncated description
-const PrintablePlantInfo = (props: {plant: Plant, print: boolean}) => {
+const PrintablePlantInfo = (props: {plant: Plant}) => {
 
     const { plant } = props;
     return (<div className="print-info">
         <h4>{plant.latinName}</h4>
                 {plant.commonNames && <p>Also known as: {plant.commonNames.map((name) => {return name + "  "})}</p>}
-                {plant.images && !props.print && <ImageCarousel images={plant.images} />}
                 {plant.invasive && <span className="plant-badge yellow">invasive </span>}
                 {plant.delawareNative && <span className="plant-badge pink">native</span>}
                 {plant.light && plant.light >= 0 && <span className="plant-badge white">light: {plant.light}</span>}
-                {plant.canopy && <span className="plant-badge green">canopy: {plant.canopy}</span>}
+                {plant.canopy && <span className="plant-badge purple">{plant.canopy}</span>}
                 {plant.moisture && <span className="plant-badge blue">{plant.moisture}</span>}
                 {plant.soilType && <span className="plant-badge brown">{plant.soilType}</span>}
-                {/* {plant.bloomTime && <BloomTime times={plant.bloomTime} />} */}
-                {plant.description && <div className="description"> <p>{props.print ? plant.description.substring(0, 500) : plant.description}</p></div>}
+                {plant.bloomTime && <BloomTime times={plant.bloomTime} />}
+                {plant.description && <div className="description"> {plant.description.substring(0, 500)} ...</div>}
         </div>)
 }
 
