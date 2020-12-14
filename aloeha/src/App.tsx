@@ -11,7 +11,7 @@ import _ from "lodash";
 type UserState = {
   newUser: User,
   existingPlants: Plant[],
-  suggestedPlants: Plant[],
+  recommendedPlants: Plant[],
   gardenObjects: GardenObject[],
   gardenPlants: Plant[],
   currentKey: number
@@ -147,7 +147,7 @@ export class App extends React.Component<{}, UserState>{
         colorsWanted: []
       },
       existingPlants: [],
-      suggestedPlants: [],
+      recommendedPlants: [],
       gardenPlants: [], // TODO: refactor this later to something less confusing 
       gardenObjects: [],
       //gardenPlants = plants the user has selected in Add page
@@ -162,6 +162,7 @@ export class App extends React.Component<{}, UserState>{
     this.handleNumInput = this.handleNumInput.bind(this);
     this.handleStringInput = this.handleStringInput.bind(this);
     this.handleExistingPlantSelect = this.handleExistingPlantSelect.bind(this);
+    this.handleRecommendedPlantSelect = this.handleRecommendedPlantSelect.bind(this);
 
   }
 
@@ -246,6 +247,11 @@ export class App extends React.Component<{}, UserState>{
     console.log(this.state);
   }
 
+  handleRecommendedPlantSelect(e: Plant[]) {
+    this.setState({recommendedPlants: e});
+    console.log(this.state);
+  }
+
   render() {
 
     return (
@@ -266,7 +272,10 @@ export class App extends React.Component<{}, UserState>{
                                                                       onCBSeasonsChange={this.handleCBSeasons}
                                                                       onCBColorsChange={this.handleCBColors} />} />
               <Route path="/add" exact render={() => <Add 
-                                                                      plants={fakePlantList}/>} />
+                                                                      user={this.state.newUser}
+                                                                      existingPlants={this.state.existingPlants}
+                                                                      recommendedPlants={this.state.recommendedPlants}
+                                                                      onPlantSelect={this.handleRecommendedPlantSelect}/>} />
               <Route path="/preview" exact render={() => <Preview 
                                                                       gardenObjects={fakeObjectList}
                                                                       plants={fakePlantList}/>} /> 
@@ -274,8 +283,8 @@ export class App extends React.Component<{}, UserState>{
               <Route path="/build" exact render={() => <Build 
                                                                       addGardenObject={this.addGardenObject}
                                                                       moveGardenObject={this.moveGardenObject} 
-                                                                      gardenObjects={this.state.gardenObjects}/>}
-                                                                      existingPlants={fakePlantList} />
+                                                                      gardenObjects={this.state.gardenObjects}
+                                                                      existingPlants={this.state.existingPlants} />} />
           </Switch>
         </Router>
       </div>

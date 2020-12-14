@@ -94,6 +94,12 @@ li:hover {
 .bloom-yes {
     width: 40px;
     height: 10px;
+    background-color: olivedrab;
+}
+.bloom-no {
+    width: 40px;
+    height: 10px;
+    background-color: tomato;
     background-color: black;
 }
 
@@ -102,14 +108,21 @@ li:hover {
     color: black;
     background-color:#ffffff;
     float:right;
+    overflow: hidden;
 }
 #garden-select {
     text-align: left;
+    overflow:scroll;
     height: 600px;
     background-color: #a1ca28;
     float: left;
     padding: 20px;
     width:300px;
+}
+.react-draggable {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 #gardenpage {
     height: 600px;
@@ -121,6 +134,12 @@ li:hover {
 }
 .garden-obj {
     width: fit-content;
+}
+.garden-obj > img {
+    max-width: 100px;
+}
+.Collapsible__contentInner {
+    overflow-x: scroll;
 }
 #layout {
     background-color: white;

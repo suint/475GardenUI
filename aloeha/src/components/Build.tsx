@@ -26,7 +26,6 @@ const dummyPlant2: Plant = {
 const ObjectList = ["Flamingo", "Bench", "Birdbath", "Fence", "Forest", "Gnome", "Path", "Patio", "Playground", "Pool", "Road", "Rock", "TextLabel"];
 
 class Build extends React.Component<any, {}> {
-    
     constructor(props: any) {
         super(props);
         this.objectAdded = this.objectAdded.bind(this);
@@ -50,23 +49,21 @@ class Build extends React.Component<any, {}> {
     render() {
         return(
             <div id="gardenpage">
-                <h1>Build widget goes here</h1>
+                <h1>Build your garden</h1>
                 <div id="garden-select">
-                    <p>Drag and drop your plants and objects from the drop downs on the left to build your garden. Click next to see your garden in a different season, age, and view, or you can save your garden project here.</p>
-                    <div>
-                        {console.log(this.props.existingPlants)}
-                {/* <PlantSelection plants={this.props.existingPlants} objectAdded={this.objectAdded} trigger="Existing Plants"/>   */}
-            </div>
-
-            
+                    <p>
+                        Drag and drop your plants and objects from the drop downs on the left to build your garden. 
+                        Click next to see your garden in a different season, age, and view, or you can save your garden project here.
+                    </p>
+                    <PlantSelection plants={this.props.existingPlants} objectAdded={this.objectAdded} trigger="Existing Plants"/>  
                 </div>
-                <div id="garden-box" style={{height: '600px', width: '500px', position: 'relative'}}>
+
+                <div id="garden-box" style={{height: '600px', width: '500px', position: 'absolute', left: "300px"}}>
                         {this.props.gardenObjects.map((object: GardenObject) => {
                         return <DraggableObject onDrag={this.props.moveGardenObject} gardenObject={object} key={object.key}/>
                     })}
                 </div>
             </div>
-
     )
     }
 }
@@ -114,7 +111,7 @@ class DraggableObject extends React.Component<any, DraggableState> {
         let bounds: DraggableBounds = {top: 0, bottom: 600, left: 0, right: 500}; // TODO: this allows image to be dragged out of bounds (since anchor point is at upper left corner)
             // also it's not very responsive :(
         return(
-            <Draggable onDrag={this.handleDrag} bounds={bounds} {...dragHandlers}>
+            <Draggable onDrag={this.handleDrag} bounds={bounds} defaultPosition={{x: this.props.gardenObject.x, y: this.props.gardenObject.y}} {...dragHandlers}>
                 <div className="garden-obj">
                     <img src={this.state.gardenObject.image}></img>
                     <p>{this.state.gardenObject.x}, {this.state.gardenObject.y}</p>
@@ -128,7 +125,7 @@ class DraggableObject extends React.Component<any, DraggableState> {
 const PlantSelection = (props:{plants: Plant[], objectAdded(plant:Plant):any, trigger: string}) => {
     return(
     <div className="plant-category">
-        <Collapsible trigger="Plants" >
+        <Collapsible trigger={props.trigger}>
             {props.plants.map((obj:Plant) => {return <PlantDisplay plant={obj} handleClick={props.objectAdded} />})}
         </Collapsible>
     </div> 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, withRouter, useLocation } from "react-router-dom";
  
-const pages = ["/", "/select", "/questionnaire", "/design", "/preview", "/build"];
+const pages = ["/", "/select", "/questionnaire", "/add", "/design", "/build", "/preview"];
 
 function Navbar(props: any) {
     const location = useLocation();
@@ -29,11 +29,11 @@ function Navbar(props: any) {
         <Link className="nav-link" to={"/design"}>
             Design
         </Link>
-        <Link className="nav-link" to={"/preview"}>
-            Preview
-        </Link>
         <Link className="nav-link" to={"/build"}>
             Build
+        </Link>
+        <Link className="nav-link" to={"/preview"}>
+            Preview
         </Link>
         {nextPage ? 
         <Link className="nav-link" to={nextPage}>
