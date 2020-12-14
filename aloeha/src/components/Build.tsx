@@ -11,7 +11,8 @@ const dummyPlant: GardenObject = {
     name: "bdglsdfg ieurhskdfl",
     image: "https://crouton.net/crouton.png",
     x: 150,
-    y: 150
+    y: 150,
+    canopy: "UNDERSTORY"
 }
 
 const dummyPlant2: Plant = {

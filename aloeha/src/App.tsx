@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Navbar, Select, Start, Design, Questionnaire, Preview, Build, Add } from "./components";
 import './App.css';
 import _ from "lodash";
+import { createUnionTypeNode } from 'typescript';
 
 //https://jsfiddle.net/vbwe1s44/ example 
 
@@ -166,13 +167,14 @@ export class App extends React.Component<{}, UserState>{
 
   }
 
-  addGardenObject(objectName: string, imageSrc: string) {
+  addGardenObject(objectName: string, imageSrc: string, canopy: string) {
     const { currentKey, gardenObjects } = this.state;
     const newObject: GardenObject = {
       x: 0,
       y: 0,
       image: imageSrc,
       name: objectName,
+      canopy: canopy,
       key: currentKey+1,
     }
     this.setState(

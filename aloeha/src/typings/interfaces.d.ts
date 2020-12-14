@@ -58,6 +58,7 @@ interface User {
 interface GardenObject {
     x: number,
     y: number,
+    canopy: string,
     image: string,
     name: string,
     key: number

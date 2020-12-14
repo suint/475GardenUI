@@ -2,6 +2,8 @@ import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import Draggable, {DraggableBounds} from 'react-draggable';
 import ImageCarousel from 'react-responsive-carousel';
+import html2canvas from 'html2canvas';  
+import jsPDF from 'jspdf';
 
 type PreviewProps = {
     gardenObjects: GardenObject[],
@@ -33,6 +35,25 @@ class Preview extends React.Component<any, PreviewState> {
         }
     }
 
+    printDocument() {  
+        const layout = document.getElementById('layout');  
+        const pdf = new jsPDF('p', 'mm', 'a4') ;
+        if (layout) {
+        html2canvas(layout, {allowTaint: true, useCORS: true})  
+          .then((canvas) => {  
+            var imgWidth = 200;  
+            var pageHeight = 290;  
+            var imgHeight = canvas.height * imgWidth / canvas.width;  
+            var heightLeft = imgHeight;  
+            const imgData = canvas.toDataURL('image/png');  
+            var position = 0;  
+            var heightLeft = imgHeight;  
+            pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);  
+            pdf.save("garden_layout.pdf");  
+          });  
+      }
+    }
+
     render() {
         return (
             <div id="design">
@@ -43,7 +64,7 @@ class Preview extends React.Component<any, PreviewState> {
                 <div id="info">
                     <h4>Options</h4>
                     <button onClick={this.toggleViewMode}>{(this.state.viewMode == "Window") ? "Top-down view" : "Window view"}</button> <br />
-                    <button>Get printable version</button>
+                    <button onClick={this.printDocument}>Get printable version</button>
                     <h4>Plant Information</h4>
                     {this.props.plants.map((plant: Plant) => {return <PrintablePlantInfo plant={plant} print={false} />})}
                 </div>
