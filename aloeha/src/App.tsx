@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Navbar, Select, Start, Questionnaire, Preview, Build, Add } from "./components";
+import Favicon from 'react-favicon';
 import './App.css';
 import _ from "lodash";
 import { createUnionTypeNode } from 'typescript';
@@ -270,6 +271,8 @@ export class App extends React.Component<{}, UserState>{
 
     return (
       <div className="App">
+        
+        <Favicon url="./img/fiveLeaf.png" />
         <Router>
               <Navbar />
           <Switch>
