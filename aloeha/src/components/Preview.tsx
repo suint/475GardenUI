@@ -108,13 +108,13 @@ class Preview extends React.Component<any, PreviewState> {
     render() {
         return (
             <div id="design">
-                <div id="layout">
+                <div id="layout" className={(this.state.viewMode == "Window") ? "window" : ""}>
                     {this.props.gardenObjects.map((object: GardenObject) => {
                         return <ObjectDisplay gardenObject={object} viewMode={this.state.viewMode}/>})}
                 </div>
                 <div id="info">
                     <h4>Options</h4>
-                    <button onClick={this.toggleViewMode}>{(this.state.viewMode == "Window") ? "Top-down view" : "Window view"}</button> <br />
+                    <button onClick={this.toggleViewMode}>{(this.state.viewMode == "Window") ? "See top-down view" : "See window view"}</button> <br />
                     <button onClick={this.printDocument}>Get printable version</button>
                     <h4>Plant Information</h4>
                     <div id="plant-info">
