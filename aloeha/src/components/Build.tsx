@@ -6,8 +6,21 @@ import Collapsible from "react-collapsible";
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import _ from "lodash";
-import { PlantDisplay } from "./Add"
-import Default from './img/reference pictures/default_plant.png'
+import { PlantDisplay } from "./Add";
+import Default from './img/reference pictures/default_plant.png';
+import Flamingo from './img/objects/flamingo.png';
+import Bench from './img/objects/bench.png';
+import Birdbath from './img/objects/birdbath.png';
+import Fence from './img/objects/fence.png';
+import Forest from './img/objects/forest.png';
+import Gnome from './img/objects/gnome.png';
+import Path from './img/objects/path.png';
+import Patio from './img/objects/patio.png';
+import Playground from './img/objects/bench.png';
+import Pool from './img/objects/pool.png';
+import Road from './img/objects/road.png';
+import Rock from './img/objects/rock.png';
+import { PassThrough } from "stream";
 
 const dummyPlant: GardenObject = {
     key: 0,
@@ -23,7 +36,7 @@ const dummyPlant2: Plant = {
     images: ["https://crouton.net/crouton.png"]
 }
 
-const ItemList = ["Flamingo", "Bench", "Birdbath", "Fence", "Forest", "Gnome", "Path", "Patio", "Playground", "Pool", "Road", "Rock", "TextLabel"];
+const ItemList = ["Flamingo", "Bench", "Birdbath", "Fence", "Forest", "Gnome", "Path", "Patio", "Playground", "Pool", "Road", "Rock"];
 
 class Build extends React.Component<any, {}> {
     constructor(props: any) {
@@ -33,8 +46,56 @@ class Build extends React.Component<any, {}> {
         this.objectDrag = this.objectDrag.bind(this);
     }
 
-    itemAdded = (name: string) => {
-        
+    itemAdded = (name: string, text?: string) => {
+        if (name == "Textlabel") {
+            this.props.addGardenObject(text, "");
+            this.forceUpdate();
+        } else {
+            var img;
+            switch(name) {
+                case "Flamingo":
+                    img = Flamingo;
+                    break;
+                case "Bench":
+                    img = Bench;
+                    break;
+                case "Birdbath":
+                    img = Birdbath;
+                    break;
+                case "Fence":
+                    img = Fence;
+                    break;
+                case "Forest":
+                    img = Forest;
+                    break;
+                case "Gnome":
+                    img = Gnome;
+                    break;
+                case "Path":
+                    img = Path;
+                    break;
+                case "Patio":
+                    img = Patio;
+                    break;
+                case "Playground":
+                    img = Playground;
+                    break;
+                case "Pool":
+                    img = Pool;
+                    break;
+                case "Road":
+                    img = Road;
+                    break;
+                case "Rock":
+                    img = Rock;
+                    break;
+                default:
+                    img = Default;
+                    break;
+            }
+            this.props.addGardenObject(name, img);
+            this.forceUpdate();
+        }
     }
 
     plantAdded = (plant: Plant) => {
