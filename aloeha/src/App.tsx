@@ -291,9 +291,8 @@ export class App extends React.Component<{}, UserState>{
                                                                       onPlantSelect={this.handleRecommendedPlantSelect}/>} />
               <Route path="/preview" exact render={() => <Preview 
                                                                       gardenObjects={this.state.gardenObjects}
-                                                                      plants={fakePlantList}
-                                                                      user={fakeUser}/>} /> 
-                                                                      {/* this.state.existingPlants.concat(this.state.suggestedPlants) */}
+                                                                      plants={this.state.existingPlants.concat(this.state.recommendedPlants)}
+                                                                      user={this.state.newUser}/>} /> 
               <Route path="/build" exact render={() => <Build 
                                                                       addGardenObject={this.addGardenObject}
                                                                       moveGardenObject={this.moveGardenObject} 
