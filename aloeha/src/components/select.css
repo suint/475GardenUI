@@ -32,7 +32,6 @@ body {
     color: black;
     background-color:#ffffff;
     height:inherit;
-    position:relative;
 }
 #search-plants {
     text-align: left;
