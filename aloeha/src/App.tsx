@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Navbar, Select, Start, Questionnaire, Preview, Build, Add } from "./components";
 import './App.css';
 import _ from "lodash";
+import { createUnionTypeNode } from 'typescript';
 
 //https://jsfiddle.net/vbwe1s44/ example 
 
@@ -16,6 +17,18 @@ type UserState = {
   gardenPlants: Plant[],
   currentKey: number
 };
+
+const fakeUser: User = {
+  name: "my garden",
+  length: 234,
+  width: 1203,
+  plotItems: [],
+  moisture: "buh",
+  soil: "12323r",
+  sunlight: "bababba",
+  seasonsWanted: ["aaaaa"],
+  colorsWanted: ["yellow"]
+}
 
 const fakePlantList = [
   {
@@ -166,13 +179,14 @@ export class App extends React.Component<{}, UserState>{
 
   }
 
-  addGardenObject(objectName: string, imageSrc: string) {
+  addGardenObject(objectName: string, imageSrc: string, canopy: string) {
     const { currentKey, gardenObjects } = this.state;
     const newObject: GardenObject = {
       x: 0,
       y: 0,
       image: imageSrc,
       name: objectName,
+      canopy: canopy,
       key: currentKey+1,
     }
     this.setState(
@@ -276,8 +290,9 @@ export class App extends React.Component<{}, UserState>{
                                                                       recommendedPlants={this.state.recommendedPlants}
                                                                       onPlantSelect={this.handleRecommendedPlantSelect}/>} />
               <Route path="/preview" exact render={() => <Preview 
-                                                                      gardenObjects={fakeObjectList}
-                                                                      plants={fakePlantList}/>} /> 
+                                                                      gardenObjects={this.state.gardenObjects}
+                                                                      plants={fakePlantList}
+                                                                      user={fakeUser}/>} /> 
                                                                       {/* this.state.existingPlants.concat(this.state.suggestedPlants) */}
               <Route path="/build" exact render={() => <Build 
                                                                       addGardenObject={this.addGardenObject}

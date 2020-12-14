@@ -97,19 +97,19 @@ class Add extends React.Component <any, AddState> {
         // winter is dec, jan, feb; spring is mar, apr, may; summer is june, july, aug; 
         // fall is sept, oct, nov (meterological seasons)
         for (var a=1; a<13; a++) {
-            if (a == 1 || a == 2 || a == 12) {
+            if ((a == 1 && bloomTime[a]) || (a == 2 && bloomTime[a]) || (a == 12 && bloomTime[a]) ) {
                 if (seasonsWanted.includes("Winter")) {
                     return true;
                 }
-            } else if (a == 3 || a == 4 || a == 5) {
+            } else if ((a == 3&& bloomTime[a])  || (a == 4&& bloomTime[a])  || (a == 5 && bloomTime[a]) ) {
                 if (seasonsWanted.includes("Spring")) {
                     return true;
                 }
-            } else if (a == 6 || a == 7 || a == 8) {
+            } else if ((a == 6 && bloomTime[a]) || (a == 7 && bloomTime[a]) || (a == 8 && bloomTime[a]) ) {
                 if (seasonsWanted.includes("Summer")) {
                     return true;
                 }
-            } else if (a == 9 || a == 10 || a == 11) {
+            } else if ((a == 9 && bloomTime[a]) || (a == 10 && bloomTime[a]) || (a == 11&& bloomTime[a]) ) {
                 if (seasonsWanted.includes("Fall")) {
                     return true;
                 }
@@ -145,23 +145,23 @@ class Add extends React.Component <any, AddState> {
         let fits = true;
 
         // check plant growing conditions fit the garden (moisture level, sunlight levels, soil type)
-        if (plant.moisture == moisture.toUpperCase() || !plant.moisture || !moisture || plant.moisture == "ANY") {
+        if (!plant.moisture || !moisture || plant.moisture == "ANY" || plant.moisture == moisture.toUpperCase() ) {
             console.log("moisture OK");
         } else {
             fits = false;
         }
-        if (this.checkLight(sunlight, plantLight)) {
+        if (sunlight && this.checkLight(sunlight, plantLight)) {
             console.log("light OK");
         } else {
             fits = false;
         }
-        if (plant.soilType == soil.toUpperCase() || !soil || !plant.soilType || plant.soilType == "ANY" || soil == "Any Soil") {
+        if (!soil || plant.soilType == soil.toUpperCase() || !plant.soilType || plant.soilType == "ANY" || soil == "Any Soil") {
             console.log("soil OK");
         } else {
             fits = false;
         }
         //check it blooms during one of the desired seasons
-        if (!plant.bloomTime || _.isEmpty(seasonsWanted) || seasonsWanted.includes("Year Round") || this.checkSeasons(plant.bloomTime, seasonsWanted)){
+        if (!seasonsWanted || !plant.bloomTime || _.isEmpty(seasonsWanted) || seasonsWanted.includes("Year Round") || this.checkSeasons(plant.bloomTime, seasonsWanted)){
             console.log("bloom time OK");
         } else {
             fits = false;

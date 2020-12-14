@@ -39,6 +39,10 @@
 .nav-link {
   background-color: white;
   font-weight: bold;
-  padding: .5em 1em;
-  margin: .2em .5em;
+  padding: 1em 1em;
+  margin: 1em 0em;
+}
+.nav-link:hover {
+  background-color:whitesmoke;
+  text-decoration: none;
 }
