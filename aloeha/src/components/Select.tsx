@@ -91,7 +91,7 @@ class Select extends React.Component<any, boxState> {
 render() {
     return (
         <div id="plantbox">
-            <h1>Plant Select</h1>
+            <h1>Select plants</h1>
             <div id="search-plants" className="plants">
                 <p>Search for plants which already grow in your garden.</p>
                 <p>Once you have found your plant, click on its name to add it to your list. To remove a plant from your list, simply click it again.</p>
@@ -146,7 +146,7 @@ const PlantDisplay = (props: PlantDisProps) => {
     const { handleClick, plant } = props;
     return <ReactHover options={optionsCursorTrueWithMargin}>
         <Trigger>
-            <li onClick={() => handleClick(plant)}> {plant.latinName} </li>
+            <li key={props.plant.id} onClick={() => handleClick(plant)}> {plant.latinName} </li>
         </Trigger>
         <Hover>
                 <PlantInfo plant={plant} />
