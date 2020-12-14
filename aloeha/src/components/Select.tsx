@@ -146,7 +146,7 @@ const PlantDisplay = (props: PlantDisProps) => {
     const { handleClick, plant } = props;
     return <ReactHover options={optionsCursorTrueWithMargin}>
         <Trigger>
-            <li onClick={() => handleClick(plant)}> {plant.latinName} </li>
+            <li key={props.plant.id} onClick={() => handleClick(plant)}> {plant.latinName} </li>
         </Trigger>
         <Hover>
                 <PlantInfo plant={plant} />

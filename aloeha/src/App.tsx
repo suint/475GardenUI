@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Navbar, Select, Start, Design, Questionnaire, Preview, Build, Add } from "./components";
+import { Navbar, Select, Start, Questionnaire, Preview, Build, Add } from "./components";
 import './App.css';
 import _ from "lodash";
 
@@ -283,7 +283,8 @@ export class App extends React.Component<{}, UserState>{
                                                                       addGardenObject={this.addGardenObject}
                                                                       moveGardenObject={this.moveGardenObject} 
                                                                       gardenObjects={this.state.gardenObjects}
-                                                                      existingPlants={this.state.existingPlants} />} />
+                                                                      existingPlants={this.state.existingPlants}
+                                                                      recommendedPlants={this.state.recommendedPlants} />} />
           </Switch>
         </Router>
       </div>

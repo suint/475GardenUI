@@ -23,16 +23,21 @@ const dummyPlant2: Plant = {
     images: ["https://crouton.net/crouton.png"]
 }
 
-const ObjectList = ["Flamingo", "Bench", "Birdbath", "Fence", "Forest", "Gnome", "Path", "Patio", "Playground", "Pool", "Road", "Rock", "TextLabel"];
+const ItemList = ["Flamingo", "Bench", "Birdbath", "Fence", "Forest", "Gnome", "Path", "Patio", "Playground", "Pool", "Road", "Rock", "TextLabel"];
 
 class Build extends React.Component<any, {}> {
     constructor(props: any) {
         super(props);
-        this.objectAdded = this.objectAdded.bind(this);
+        this.itemAdded = this.itemAdded.bind(this);
+        this.plantAdded = this.plantAdded.bind(this);
         this.objectDrag = this.objectDrag.bind(this);
     }
 
-    objectAdded = (plant: Plant) => {
+    itemAdded = (name: string) => {
+        
+    }
+
+    plantAdded = (plant: Plant) => {
         if(plant.images){
             this.props.addGardenObject(plant.latinName, plant.images[0]);
             this.forceUpdate();
@@ -55,7 +60,16 @@ class Build extends React.Component<any, {}> {
                         Drag and drop your plants and objects from the drop downs on the left to build your garden. 
                         Click next to see your garden in a different season, age, and view, or you can save your garden project here.
                     </p>
-                    <PlantSelection plants={this.props.existingPlants} objectAdded={this.objectAdded} trigger="Existing Plants"/>  
+                    <PlantSelection plants={this.props.existingPlants} objectAdded={this.plantAdded} trigger="Existing plants"/>  
+                    <PlantSelection plants={this.props.recommendedPlants} objectAdded={this.plantAdded} trigger="Recommended plants"/>  
+                    <div className="plant-category">
+                        <Collapsible trigger="Objects">
+                            {ItemList.map((name)=> {
+                                return <ItemSelection object={name} objectAdded={this.itemAdded}/>
+                            })}
+                        </Collapsible>
+                    </div>
+
                 </div>
 
                 <div id="garden-box" style={{height: '600px', width: '500px', position: 'absolute', left: "300px"}}>
@@ -120,6 +134,12 @@ class DraggableObject extends React.Component<any, DraggableState> {
             </Draggable>
         )
     }
+}
+
+const ItemSelection = (props: {object: string, objectAdded(name: string): any}) => {
+    return <div onClick={() => props.objectAdded(props.object)} className="plant-hover">
+        {props.object}
+    </div>;
 }
 
 const PlantSelection = (props:{plants: Plant[], objectAdded(plant:Plant):any, trigger: string}) => {
