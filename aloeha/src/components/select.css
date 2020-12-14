@@ -14,7 +14,7 @@ body {
 .carousel .slide {
     background-color: transparent;
 }
-.plants {
+.plants { 
     width: 50%;
     float: left;
     padding: 20px;
@@ -32,6 +32,7 @@ body {
     color: black;
     background-color:#ffffff;
     height:inherit;
+    position:relative;
 }
 #search-plants {
     text-align: left;
@@ -108,14 +109,21 @@ li:hover {
     color: black;
     background-color:#ffffff;
     float:right;
+    overflow: hidden;
 }
 #garden-select {
     text-align: left;
+    overflow:scroll;
     height: 600px;
     background-color: #a1ca28;
     float: left;
     padding: 20px;
     width:300px;
+}
+.react-draggable {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 #gardenpage {
     height: 600px;
@@ -127,6 +135,9 @@ li:hover {
 }
 .garden-obj {
     width: fit-content;
+}
+.garden-obj > img {
+    max-width: 100px;
 }
 .Collapsible__contentInner {
     overflow-x: scroll;

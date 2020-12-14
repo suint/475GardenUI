@@ -239,7 +239,7 @@ const PlantSelect = (props: {plants: Plant[], handleClick(plant: Plant): any}) =
     }
 }
 
-const PlantDisplay = (props: {plant: Plant, handleClick(plant: Plant): any}) => {
+export const PlantDisplay = (props: {plant: Plant, handleClick(plant: Plant): any}) => {
     return (
         <div className="plant-info">
             <button onClick={() => props.handleClick(props.plant)}>+</button>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Navbar, Select, Start, Design, Questionnaire, Preview, Build, Add } from "./components";
+import { Navbar, Select, Start, Questionnaire, Preview, Build, Add } from "./components";
 import './App.css';
 import _ from "lodash";
 import { createUnionTypeNode } from 'typescript';
@@ -265,7 +265,6 @@ export class App extends React.Component<{}, UserState>{
               <Route path="/select" exact render={() => <Select
                                                                       onPlantSelect={this.handleExistingPlantSelect} 
                                                                       existingPlants={this.state.existingPlants}/>} />
-              <Route path="/design" exact render={() => <Design />} />
               <Route path="/questionnaire" exact render={() => <Questionnaire
                                                                       newUser={this.state.newUser}
                                                                       onInputNumChange={this.handleNumInput}
@@ -285,7 +284,9 @@ export class App extends React.Component<{}, UserState>{
               <Route path="/build" exact render={() => <Build 
                                                                       addGardenObject={this.addGardenObject}
                                                                       moveGardenObject={this.moveGardenObject} 
-                                                                      gardenObjects={this.state.gardenObjects}/>} />
+                                                                      gardenObjects={this.state.gardenObjects}
+                                                                      existingPlants={this.state.existingPlants}
+                                                                      recommendedPlants={this.state.recommendedPlants} />} />
           </Switch>
         </Router>
       </div>
