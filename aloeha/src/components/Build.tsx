@@ -5,6 +5,7 @@ import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import _ from "lodash";
+import "./Build.css"
 
 const dummyPlant: GardenObject = {
     key: 0,
@@ -28,14 +29,24 @@ class Build extends React.Component<any, {}> {
         super(props);
         this.objectAdded = this.objectAdded.bind(this);
         this.objectDrag = this.objectDrag.bind(this);
+
     }
 
     objectAdded = () => {
         this.props.addGardenObject(dummyPlant2.latinName, "https://crouton.net/crouton.png");
         this.forceUpdate();
+        console.log(this.props.existingPlants)
     }
 
-    objectDrag = () => {}
+    objectDrag = () => { }
+    
+    convertPlant = () => {
+        let selectedGardenObjects=[]
+        {this.props.existingPlants.map((object: Plant) => {
+            let gardenObject : GardenObject
+            
+        })}
+    }
 
     render() {
         return(
