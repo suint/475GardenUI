@@ -20,6 +20,10 @@ import Playground from './img/objects/bench.png';
 import Pool from './img/objects/pool.png';
 import Road from './img/objects/road.png';
 import Rock from './img/objects/rock.png';
+import Canopy from './img/plot_plants/plotCanopy.png';
+import Emergent from './img/plot_plants/plotEmergent.png';
+import Floor from './img/plot_plants/plotFloor.png';
+import Understory from './img/plot_plants/plotUnderstory.png';
 import { PassThrough } from "stream";
 import "./Build.css"
 
@@ -38,7 +42,7 @@ const dummyPlant2: Plant = {
     images: ["https://crouton.net/crouton.png"]
 }
 
-const ItemList = ["Flamingo", "Bench", "Birdbath", "Fence", "Forest", "Gnome", "Path", "Patio", "Playground", "Pool", "Road", "Rock"];
+export const ItemList = ["Flamingo", "Bench", "Birdbath", "Fence", "Forest", "Gnome", "Path", "Patio", "Playground", "Pool", "Road", "Rock"];
 
 class Build extends React.Component<any, {}> {
     constructor(props: any) {
@@ -107,7 +111,26 @@ class Build extends React.Component<any, {}> {
             this.forceUpdate();
         }
         else{
-            this.props.addGardenObject(plant.latinName, Default);
+            if (plant.canopy) {
+                switch(plant.canopy.toLowerCase()) {
+                    case "canopy":
+                        this.props.addGardenObject(plant.latinName, Canopy);
+                        break;
+                    case "floor":
+                        this.props.addGardenObject(plant.latinName, Floor);
+                        break;
+                    case "emergent":
+                        this.props.addGardenObject(plant.latinName, Emergent);
+                        break;
+                    case "understory":
+                        this.props.addGardenObject(plant.latinName, Understory);
+                        break;
+                    default:
+                        this.props.addGardenObject(plant.latinName, Default);
+                }
+            } else {
+                this.props.addGardenObject(plant.latinName, Default);
+            }
             this.forceUpdate();
         }
     }

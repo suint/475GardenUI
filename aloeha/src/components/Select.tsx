@@ -67,7 +67,7 @@ class Select extends React.Component<any, boxState> {
         if (plant.commonNames) {
             plantText = plantText + plant.commonNames.join(" ");
         }
-        if (plantText.toLowerCase().search(query.toLowerCase()) > 0) {
+        if (plantText.toLowerCase().search(query.toLowerCase()) > -1) {
             return true;
         }
         return false;

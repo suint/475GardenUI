@@ -5,6 +5,7 @@ import ImageCarousel from 'react-responsive-carousel';
 import html2canvas from 'html2canvas';  
 import jsPDF from 'jspdf';
 import { BloomTime } from "./Select";
+import { ItemList } from "./Build";
 
 type PreviewProps = {
     gardenObjects: GardenObject[],
@@ -67,6 +68,10 @@ class Preview extends React.Component<any, PreviewState> {
         return userInfo;
     }
 
+    setYear(year: number){
+        this.setState({year: year});
+    }
+
     printDocument() {  
         const { user } = this.props;
         const layout = document.getElementById('layout');  
@@ -117,11 +122,14 @@ class Preview extends React.Component<any, PreviewState> {
             <div id="design">
                 <div id="layout">
                     {this.props.gardenObjects.map((object: GardenObject) => {
-                        return <ObjectDisplay gardenObject={object} viewMode={this.state.viewMode}/>})}
+                        return <ObjectDisplay gardenObject={object} viewMode={this.state.viewMode} year={this.state.year}/>})}
                 </div>
                 <div id="info">
                     <h4>Options</h4>
                     <button onClick={this.toggleViewMode}>{(this.state.viewMode == "Window") ? "See top-down view" : "See window view"}</button> <br />
+                    {(this.state.viewMode == "Window") ? <span id="years"><button onClick={()=>{this.setYear(0)}}>Year 0</button>
+                    <button onClick={()=>{this.setYear(1)}}>Year 1</button> 
+                    <button onClick={()=>{this.setYear(2)}}>Year 2</button></span> : ""}
                     <button onClick={this.printDocument}>Get printable version</button>
                     <h4>Plant Information</h4>
                     <div id="plant-info">
@@ -151,7 +159,15 @@ const PrintablePlantInfo = (props: {plant: Plant}) => {
         </div>)
 }
 
-const ObjectDisplay = (props: {gardenObject: GardenObject, viewMode: string}) => {
+let isItem = (object: GardenObject) => {
+    if (ItemList.includes(object.name)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+const ObjectDisplay = (props: {gardenObject: GardenObject, viewMode: string, year: number}) => {
     let { x, y } = props.gardenObject;
     let bounds: DraggableBounds = {top: 0, bottom: 600, left: 0, right: 500};
     let offset = {x: 0, y: 0};
@@ -160,6 +176,13 @@ const ObjectDisplay = (props: {gardenObject: GardenObject, viewMode: string}) =>
         offset.y = 250;
         imgTransform = y/600 + .5;
         y = (y/600) * 250; // new y bound is half of screen
+        if (!isItem(props.gardenObject)){
+            if (props.year == 0){
+                imgTransform *= .5;
+            } else if (props.year == 1) {
+                imgTransform *= .8;
+            }
+        }
     }
     let imgTransformStyle = "scale(" + imgTransform + ", " + imgTransform + ")";
     return (
