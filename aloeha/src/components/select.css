@@ -67,12 +67,18 @@ li:hover {
     width:700px;
     white-space: pre-wrap;
 }
+.window {
+    background-image: url('./img/sunny.png');
+    background-size: 575px 600px;
+
+}
 .plant-badge {
     padding: .7rem;
     font-size: 10px;
     border-radius: 8px;
     box-shadow: inset;
     display: inline-block;
+    margin: 0 .5em .3em 0;
 }
 .white {
     background-color: whitesmoke;

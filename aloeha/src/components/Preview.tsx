@@ -31,10 +31,17 @@ class Preview extends React.Component<any, PreviewState> {
     }
 
     toggleViewMode = () => {
+        let layout = document.getElementById("layout");
         if (this.state.viewMode == "Top-down") {
             this.setState({viewMode: "Window"});
+            if (layout) {
+                layout.setAttribute("class", "window");
+            } 
         } else {
-            this.setState({viewMode: "Top-down"})
+            this.setState({viewMode: "Top-down"});
+            if (layout) {
+                layout.removeAttribute("class");
+            } 
         }
     }
 
@@ -108,7 +115,7 @@ class Preview extends React.Component<any, PreviewState> {
     render() {
         return (
             <div id="design">
-                <div id="layout" className={(this.state.viewMode == "Window") ? "window" : ""}>
+                <div id="layout">
                     {this.props.gardenObjects.map((object: GardenObject) => {
                         return <ObjectDisplay gardenObject={object} viewMode={this.state.viewMode}/>})}
                 </div>
