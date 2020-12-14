@@ -28,3 +28,14 @@ You can also see it from a window view:
 <img width="904" alt="Screen Shot 2020-12-14 at 3 58 30 PM" src="https://user-images.githubusercontent.com/33335295/102134969-3e029200-3e25-11eb-90b4-b30608e556a2.png">
 
 There is also the option to generate a PDF of all your information (WIP). 
+
+## Installation
+This is a standard create react app. Clone the repo, then navigate into `/aloeha`, then run `npm install`. To run locally, run `npm start`. 
+
+## Team members
+This was a project for CISC475 at the University of Delaware. 
+
+- Kelly Mi
+- Yasser Abdelaal
+- Sasha Jones
+- Adheena Chacko
